@@ -1,0 +1,18 @@
+ja:
+  activerecord:
+    models:
+      item: "アイテム"
+    attributes:
+      item:
+        name: "アイテム名"
+        kcal: "カロリー"
+        protein: "タンパク質"
+        fat: "脂質"
+        carb: "炭水化物"
+        df: "食物繊維"
+        around_qty: "分量の目安"
+      recipe:
+        name: "レシピ名"
+        kcal: "カロリー"
+        item: "アイテムID"
+        weight: "グラム"

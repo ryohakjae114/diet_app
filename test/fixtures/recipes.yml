@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  item: one
+  kcal: 9.99
+  weight: 9.99
+
+two:
+  name: MyString
+  item: two
+  kcal: 9.99
+  weight: 9.99

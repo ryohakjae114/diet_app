@@ -1,0 +1,33 @@
+%h1 アイテム　リスト
+
+%table.table
+  %thead
+    %tr
+      %th アイテム名
+      %th カロリー(kcal)
+      %th タンパク質(g)
+      %th 脂質(g)
+      %th 炭水化物(g)
+      %th 食物繊維(g)
+      %th 分量の目安
+      %th
+      %th
+      %th
+
+  %tbody
+    - @items.each do |item|
+      %tr
+        %td= item.name
+        %td= item.kcal
+        %td= item.protein
+        %td= item.fat
+        %td= item.carb
+        %td= item.df
+        %td= item.around_qty
+        %td= link_to '詳細', item
+        %td= link_to '変更', edit_item_path(item)
+        %td= link_to '削除', item, method: :delete, data: { confirm: 'よろしいですか?' }
+
+%br
+
+= link_to '新規作成', new_item_path

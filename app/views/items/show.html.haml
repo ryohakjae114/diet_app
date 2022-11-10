@@ -1,0 +1,27 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @item.name
+%p
+  %b Kcal:
+  = @item.kcal
+%p
+  %b Protein:
+  = @item.protein
+%p
+  %b Fat:
+  = @item.fat
+%p
+  %b Carb:
+  = @item.carb
+%p
+  %b Df:
+  = @item.df
+%p
+  %b Around qty:
+  = @item.around_qty
+
+= link_to 'Edit', edit_item_path(@item)
+\|
+= link_to 'Back', items_path

@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  kcal: 9.99
+  protein: 9.99
+  fat: 9.99
+  carb: 9.99
+  df: 9.99
+  around_qty: MyString
+
+two:
+  name: MyString
+  kcal: 9.99
+  protein: 9.99
+  fat: 9.99
+  carb: 9.99
+  df: 9.99
+  around_qty: MyString

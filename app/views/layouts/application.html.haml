@@ -1,0 +1,21 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title DietApp
+    = csrf_meta_tags
+    = csp_meta_tag
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
+  %body
+    - if notice
+      .alert.alert-success.mt-2.alert-dismissible
+        = notice
+        %button.close{"data-dismiss" => "alert", :type => "button"} ×
+
+    - if alert
+      .alert.alert-danger.mt-2.alert-dismissible
+        = alert
+        %button.close{"data-dismiss" => "alert", :type => "button"} ×
+        
+    =yield
