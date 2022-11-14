@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
 
   def authenticate_admin!
     unless admin_signed_in?
-      redirect_to new_admin_session_url, alert: "ログインしてください"
+      redirect_to root_url, alert: "ログインしてください"
     end
   end
 end
