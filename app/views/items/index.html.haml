@@ -10,8 +10,8 @@
       %th 炭水化物(g)
       %th 食物繊維(g)
       %th 分量の目安
-      %th
-      %th
+      %th 分量単位
+      %th 重量
       %th
 
   %tbody
@@ -23,7 +23,8 @@
         %td= item.fat
         %td= item.carb
         %td= item.df
-        %td= item.around_qty
+        %td= item.unit
+        %td= item.weight
         %td= link_to '詳細', item
         %td= link_to '変更', edit_item_path(item)
         %td= link_to '削除', item, method: :delete, data: { confirm: 'よろしいですか?' }

@@ -11,6 +11,8 @@ ja:
         carb: "炭水化物"
         df: "食物繊維"
         around_qty: "分量の目安"
+        unit: "分量単位"
+        weight: "重量"
       recipe:
         name: "レシピ名"
         kcal: "カロリー"
