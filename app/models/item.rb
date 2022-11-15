@@ -5,7 +5,6 @@ class Item < ApplicationRecord
   validates :fat, presence: true, numericality: true
   validates :carb, presence: true, numericality: true
   validates :df, presence: true, numericality: true
-  validates :around_qty
   validates :unit, presence: true
   validates :weight, presence: true, numericality: true
 end
