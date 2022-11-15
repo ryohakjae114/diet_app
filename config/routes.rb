@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
+  root "admins#top"
   resources :recipes
   resources :items
-  root "static_pages#top"
 
   devise_for :admins, controllers: {
                         sessions: "admins/sessions",

@@ -6,7 +6,17 @@ class ApplicationController < ActionController::Base
 
   def authenticate_admin!
     unless admin_signed_in?
-      redirect_to root_url, alert: "ログインしてください"
+      redirect_to new_admin_session_url, alert: "ログインしてください"
     end
+  end
+
+  def current_admin
+    if admin_signed_in?
+      Admin.find_by(id: warden.user.id)
+    end
+  end
+
+  def admin_signed_in?
+    !!(warden.user)
   end
 end
