@@ -8,7 +8,7 @@ class ItemsController < ApplicationController
 
   # GET /items or /items.json
   def index
-    @items = Item.all
+    @items = Item.paginate(page: params[:page], per_page: 1000)
   end
 
   # GET /items/1 or /items/1.json

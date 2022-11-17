@@ -1,5 +1,7 @@
 %h1 アイテム　リスト
 
+=will_paginate @items
+
 %table.table
   %thead
     %tr
@@ -33,3 +35,4 @@
 %br
 
 = link_to '新規作成', new_item_path
+=will_paginate @items

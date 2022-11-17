@@ -1,17 +1,26 @@
 %p#notice= notice
 
 %p
+  %b Img url:
+  = @recipe.img_url
+%p
   %b Name:
   = @recipe.name
 %p
-  %b Item:
-  = @recipe.item
+  %b Protein:
+  = @recipe.protein
 %p
-  %b Kcal:
-  = @recipe.kcal
+  %b Fat:
+  = @recipe.fat
 %p
-  %b Weight:
-  = @recipe.weight
+  %b Carb:
+  = @recipe.carb
+%p
+  %b Df:
+  = @recipe.df
+%p
+  %b Type:
+  = @recipe.type
 
 = link_to 'Edit', edit_recipe_path(@recipe)
 \|
