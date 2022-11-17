@@ -1,5 +1,5 @@
 class Item < ApplicationRecord
-  validates :name, presence: true, 
+  validates :name, presence: true, uniqueness: true
   validates :kcal, presence: true, numericality: true
   validates :protein, presence: true, numericality: true
   validates :fat, presence: true, numericality: true
