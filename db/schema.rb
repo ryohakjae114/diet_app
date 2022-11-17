@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_15_072618) do
+ActiveRecord::Schema.define(version: 2022_11_17_052312) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -41,13 +41,15 @@ ActiveRecord::Schema.define(version: 2022_11_15_072618) do
   end
 
   create_table "recipes", force: :cascade do |t|
+    t.string "img_url"
     t.string "name"
-    t.bigint "item_id", null: false
-    t.decimal "kcal"
-    t.decimal "weight"
+    t.decimal "protein"
+    t.decimal "fat"
+    t.decimal "carb"
+    t.decimal "df"
+    t.string "type"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["item_id"], name: "index_recipes_on_item_id"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -72,5 +74,4 @@ ActiveRecord::Schema.define(version: 2022_11_15_072618) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
-  add_foreign_key "recipes", "items"
 end

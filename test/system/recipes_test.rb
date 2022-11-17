@@ -14,10 +14,13 @@ class RecipesTest < ApplicationSystemTestCase
     visit recipes_url
     click_on "New Recipe"
 
-    fill_in "Item", with: @recipe.item_id
-    fill_in "Kcal", with: @recipe.kcal
+    fill_in "Carb", with: @recipe.carb
+    fill_in "Df", with: @recipe.df
+    fill_in "Fat", with: @recipe.fat
+    fill_in "Img url", with: @recipe.img_url
     fill_in "Name", with: @recipe.name
-    fill_in "Weight", with: @recipe.weight
+    fill_in "Protein", with: @recipe.protein
+    fill_in "Type", with: @recipe.type
     click_on "Create Recipe"
 
     assert_text "Recipe was successfully created"
@@ -28,10 +31,13 @@ class RecipesTest < ApplicationSystemTestCase
     visit recipes_url
     click_on "Edit", match: :first
 
-    fill_in "Item", with: @recipe.item_id
-    fill_in "Kcal", with: @recipe.kcal
+    fill_in "Carb", with: @recipe.carb
+    fill_in "Df", with: @recipe.df
+    fill_in "Fat", with: @recipe.fat
+    fill_in "Img url", with: @recipe.img_url
     fill_in "Name", with: @recipe.name
-    fill_in "Weight", with: @recipe.weight
+    fill_in "Protein", with: @recipe.protein
+    fill_in "Type", with: @recipe.type
     click_on "Update Recipe"
 
     assert_text "Recipe was successfully updated"

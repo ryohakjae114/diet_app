@@ -19,7 +19,7 @@ gem "turbolinks", "~> 5"
 gem "jbuilder", "~> 2.7"
 #日本語化
 gem "rails-i18n"
-gem 'devise-i18n'
+gem "devise-i18n"
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password
@@ -27,6 +27,10 @@ gem 'devise-i18n'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
+
+#ページネーション
+gem "will_paginate"
+gem "bootstrap-will_paginate"
 
 #haml化
 gem "haml-rails"

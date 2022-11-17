@@ -1,10 +1,9 @@
 class RecipesController < ApplicationController
-  before_action :authenticate_admin!
   before_action :set_recipe, only: %i[ show edit update destroy ]
 
   # GET /recipes or /recipes.json
   def index
-    @recipes = Recipe.all
+    @recipes = Recipe.paginate(page: params[:page], per_page: 1000)
   end
 
   # GET /recipes/1 or /recipes/1.json
@@ -67,6 +66,6 @@ class RecipesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def recipe_params
-    params.require(:recipe).permit(:name, :item_id, :kcal, :weight)
+    params.require(:recipe).permit(:img_url, :name, :protein, :fat, :carb, :df, :type)
   end
 end

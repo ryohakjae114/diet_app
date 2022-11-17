@@ -1,12 +1,17 @@
 %h1 Listing recipes
 
-%table.table
+=will_paginate @items
+
+%table
   %thead
     %tr
+      %th 写真url
       %th 名前
-      %th アイテムID
-      %th カロリー(kcal)
-      %th グラム
+      %th タンパク質
+      %th 脂質(g)
+      %th 炭水化物(g)
+      %th 食物繊維(g)
+      %th 種類
       %th
       %th
       %th
@@ -14,14 +19,18 @@
   %tbody
     - @recipes.each do |recipe|
       %tr
+        %td= recipe.img_url
         %td= recipe.name
-        %td= recipe.item
-        %td= recipe.kcal
-        %td= recipe.weight
-        %td= link_to 'Show', recipe
-        %td= link_to 'Edit', edit_recipe_path(recipe)
-        %td= link_to 'Destroy', recipe, method: :delete, data: { confirm: 'Are you sure?' }
+        %td= recipe.protein
+        %td= recipe.fat
+        %td= recipe.carb
+        %td= recipe.df
+        %td= recipe.type
+        %td= link_to '詳細', recipe
+        %td= link_to '変更', edit_recipe_path(recipe)
+        %td= link_to '削除', recipe, method: :delete, data: { confirm: 'Are you sure?' }
 
 %br
 
-= link_to 'New Recipe', new_recipe_path
+= link_to '新規作成', new_recipe_path
+=will_paginate @items
