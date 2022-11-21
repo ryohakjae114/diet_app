@@ -1,8 +1,8 @@
-%h1 Listing recipes
+%h1 レシピ　リスト
 
 =will_paginate @items
 
-%table
+%table.table
   %thead
     %tr
       %th 写真url
@@ -11,7 +11,7 @@
       %th 脂質(g)
       %th 炭水化物(g)
       %th 食物繊維(g)
-      %th 種類
+      %th 一般料理or外食・市販
       %th
       %th
       %th
@@ -25,7 +25,7 @@
         %td= recipe.fat
         %td= recipe.carb
         %td= recipe.df
-        %td= recipe.type
+        %td= recipe.cook_at
         %td= link_to '詳細', recipe
         %td= link_to '変更', edit_recipe_path(recipe)
         %td= link_to '削除', recipe, method: :delete, data: { confirm: 'Are you sure?' }
