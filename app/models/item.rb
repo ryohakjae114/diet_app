@@ -1,4 +1,7 @@
 class Item < ApplicationRecord
+  has_many :recipe_items
+  has_many :recipes, through: :recipe_items
+
   validates :name, presence: true, uniqueness: true
   validates :kcal, presence: true, numericality: true
   validates :protein, presence: true, numericality: true
