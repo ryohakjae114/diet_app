@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_21_062104) do
+ActiveRecord::Schema.define(version: 2022_11_21_075103) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -40,6 +40,17 @@ ActiveRecord::Schema.define(version: 2022_11_21_062104) do
     t.index ["name"], name: "index_items_on_name", unique: true
   end
 
+  create_table "recipe_items", force: :cascade do |t|
+    t.bigint "recipe_id"
+    t.bigint "item_id"
+    t.decimal "kcal"
+    t.decimal "weight"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["item_id"], name: "index_recipe_items_on_item_id"
+    t.index ["recipe_id"], name: "index_recipe_items_on_recipe_id"
+  end
+
   create_table "recipes", force: :cascade do |t|
     t.string "img_url"
     t.string "name"
@@ -50,6 +61,7 @@ ActiveRecord::Schema.define(version: 2022_11_21_062104) do
     t.integer "cook_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.decimal "kcal"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
