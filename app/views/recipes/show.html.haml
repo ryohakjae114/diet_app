@@ -1,26 +1,26 @@
 %p#notice= notice
 
 %p
-  %b Img url:
+  %b 写真:
   = @recipe.img_url
 %p
-  %b Name:
+  %b 名前:
   = @recipe.name
 %p
-  %b Protein:
+  %b タンパク質:
   = @recipe.protein
 %p
-  %b Fat:
+  %b 脂質:
   = @recipe.fat
 %p
-  %b Carb:
+  %b 炭水化物:
   = @recipe.carb
 %p
-  %b Df:
+  %b 食物繊維:
   = @recipe.df
 %p
-  %b Type:
-  = @recipe.type
+  %b 一般料理or外食・市販:
+  = @recipe.cook_at
 
 = link_to 'Edit', edit_recipe_path(@recipe)
 \|

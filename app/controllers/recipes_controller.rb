@@ -1,4 +1,5 @@
 class RecipesController < ApplicationController
+  before_action :authenticate_admin!
   before_action :set_recipe, only: %i[ show edit update destroy ]
 
   # GET /recipes or /recipes.json
@@ -66,6 +67,6 @@ class RecipesController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def recipe_params
-    params.require(:recipe).permit(:img_url, :name, :protein, :fat, :carb, :df, :type)
+    params.require(:recipe).permit(:img_url, :name, :cook_at)
   end
 end

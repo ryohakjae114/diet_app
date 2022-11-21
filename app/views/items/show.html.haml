@@ -1,26 +1,34 @@
 %p#notice= notice
 
 %p
-  %b Name:
+  %b 名前:
   = @item.name
 %p
-  %b Kcal:
+  %b カロリー:
   = @item.kcal
 %p
-  %b Protein:
+  %b タンパク質:
   = @item.protein
 %p
-  %b Fat:
+  %b 脂質:
   = @item.fat
 %p
-  %b Carb:
+  %b 炭水化物:
   = @item.carb
 %p
-  %b Df:
+  %b 食物繊維:
   = @item.df
 %p
-  %b Around qty:
+  %b 分量の目安:
   = @item.around_qty
+
+%p
+  %b 分量単位:
+  = @item.unit
+
+%p
+  %b 重量:
+  = @item.weight
 
 = link_to 'Edit', edit_item_path(@item)
 \|
