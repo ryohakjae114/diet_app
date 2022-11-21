@@ -1,0 +1,332 @@
+<h2>まとめて入力</h2>
+<p>カンマ区切りまたはタブ区切りで入力。Excelやスプレッドシートからのコピペでも可。</p>
+<textarea id="tsvArea" placeholder="ここに入力または貼り付け"></textarea><br>
+<div id="defaultValues">
+  <p><label>分量の目安のデフォルト値：<input type="text" id="defaultAroundQty"></label></p>
+  <p><label>単位のデフォルト値：<input type="text" id="defaultUnit" value="g"></label></p>
+  <p><label>単位量のデフォルト値：<input type="text" id="defaultWeight" value="100"></label></p>
+</div>
+<p><button id="importToTableButton">テーブルに取込（上書き）</button> <button id="addToTableButton">テーブルに取込（追加）</button></p>
+<hr>
+<p>ステータス：<span id="sendStatus"></span></p>
+<p><progress id="sendProgress" max="1" value="0">0/1</progress></p>
+<p>
+  <label title="Rails側で配列受け付けるようにしてくれたらこんなの作る必要ないんですが！！！">
+    <input type="checkbox" id="sendFastCheckbox"> 高速送信する（順番がバラバラになります / メモリをいっぱい使います）
+  </label>
+  <button id="sendButton">このテーブルを送信</button>
+</p>
+<table id="table" class="table">
+  <caption>テーブル（送信ボタンを押すとこの内容で作成されます）</caption>
+  <thead>
+    <tr>
+      <th>アイテム名</th>
+      <th>カロリー(kcal)</th>
+      <th>タンパク質(g)</th>
+      <th>脂質(g)</th>
+      <th>炭水化物(g)</th>
+      <th>食物繊維(g)</th>
+      <th>分量の目安</th>
+      <th>単位(例:g)</th>
+      <th>単位量(例:100)</th>
+      <th class="actionColumn"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="editingRow hidden">
+      <td colspan="9"><input type="text" class="editingInput" style="width: 95%" value=""></td>
+      <td>
+        <button class="editOkButton">OK</button>
+        <button class="deleteButton">削除</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<div class="hidden">
+  <div id="actionColumnButtonsTemplate" class="actionColumnButtons">
+    <button class="editStartButton">編集</button>
+    <button class="deleteButton">削除</button>
+  </div>
+</div>
+<script>
+  (() => {
+    class HttpError extends Error {
+      constructor(/** @type {number} */status, ...params) {
+        super(...params)
+        Error.captureStackTrace && Error.captureStackTrace(this, HttpError)
+        /** @type {number} */
+        this.status = status
+        this.name = 'HttpError'
+      }
+    }
+    const itemKeys = ['name', 'kcal', 'protein', 'fat', 'carb', 'df', 'around_qty', 'unit', 'weight'];
+    const exampleItem = {
+      name: 'example item',
+      kcal: '100',
+      protein: '1',
+      fat: '1',
+      carb: '1',
+      df: '1',
+      around_qty: '',
+      unit: 'g',
+      weight: '100',
+    };
+    const itemJapaneseNames = {
+      name: 'アイテム名',
+      kcal: 'カロリー(kcal)',
+      protein: 'タンパク質(g)',
+      fat: '脂質(g)',
+      carb: '炭水化物(g)',
+      df: '食物繊維(g)',
+      around_qty: '分量の目安',
+      unit: '単位(例:g)',
+      weight: '単位量(例:100)',
+    }
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+    let items = [];
+    let sending = false;
+
+    const tsvArea = /** @type {HTMLTextAreaElement} */(document.getElementById('tsvArea'));
+    const defaultAroundQty = /** @type {HTMLInputElement} */(document.getElementById('defaultAroundQty'));
+    const defaultUnit = /** @type {HTMLInputElement} */(document.getElementById('defaultUnit'));
+    const defaultWeight = /** @type {HTMLInputElement} */(document.getElementById('defaultWeight'));
+    const table = /** @type {HTMLTableElement} */(document.getElementById('table'));
+    const tbody = table.getElementsByTagName('tbody')[0];
+
+    const makeTrAndItemFromCsvLine = (/** @type {{line: string, isNew: boolean | undefined}} */params) => {
+      const {line, isNew} = params;
+      const tr = document.createElement('tr');
+      const rawVals = line.split(/[\t,]/).slice(0, 9);
+      const vals = Array(9).fill(null).map((_, i) => rawVals[i] || '');
+      if (!vals[0]) {
+        return {tr: null, item: null};
+      }
+      if (isNew) {
+        if (!vals[6]) vals[6] = defaultAroundQty.value || '';
+        if (!vals[7]) vals[7] = defaultUnit.value || '';
+        if (!vals[8]) vals[8] = defaultWeight.value || '';
+      }
+      vals.forEach(val => {
+        const td = document.createElement('td');
+        td.textContent = val;
+        tr.appendChild(td);
+      });
+      const actionColumn = document.createElement('td');
+      actionColumn.classList.add('actionColumn');
+      /** @type {HTMLTableCellElement} */
+      const actionColumnButtons = document.getElementById('actionColumnButtonsTemplate').cloneNode(true);
+      actionColumnButtons.removeAttribute('id');
+      actionColumn.appendChild(actionColumnButtons);
+      tr.appendChild(actionColumn);
+      const item = {};
+      for (const [i, key] of itemKeys.entries()) {
+        item[key] = vals[i];
+      }
+      return { tr, item };
+    };
+    const importToTable = (/** @type {{replace: boolean | undefined}} */options) => {
+      const lines = tsvArea.value.split(/\r\n|\r|\n/);
+      if (options.replace) {
+        items = [];
+        Array.from(tbody.getElementsByTagName('tr')).filter(tr => !tr.classList.contains('hidden')).forEach(tr => tr.remove());
+      }
+      lines.forEach(line => {
+        const {tr, item} = makeTrAndItemFromCsvLine({line, isNew: true});
+        if (tr !== null) {
+          tbody.appendChild(tr);
+          items.push(item);
+        }
+        sendStatus.textContent = `${items.length} 個`;
+      });
+    }
+    const importToTableButton = /** @type {HTMLButtonElement} */(document.getElementById('importToTableButton'));
+    importToTableButton.addEventListener('click', () => {
+      importToTable({replace: true});
+    });
+    const addToTableButton = /** @type {HTMLButtonElement} */(document.getElementById('addToTableButton'));
+    addToTableButton.addEventListener('click', () => {
+      importToTable({replace: false});
+    });
+
+    const sendStatus = /** @type {HTMLDivElement} */(document.getElementById('sendStatus'));
+    const sendProgress = /** @type {HTMLProgressElement} */(document.getElementById('sendProgress'));
+    const sendSlow = async () => {
+      const newItems = items.slice();
+      const allTrs = Array.from(tbody.getElementsByTagName('tr')).filter(tr => !tr.classList.contains('hidden'));
+      sendProgress.max = items.length;
+      for (const [i, value] of items.entries()) {
+        sendStatus.textContent = `送信中... (${i}/${items.length})`;
+        sendProgress.value = i;
+        sendProgress.textContent = `${i}/${items.length}`;
+        let /** @type {Response} */res
+        try {
+          res = await fetch('/items', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': csrfToken
+            },
+            body: JSON.stringify({
+              item: value
+            })
+          });
+        } catch (e) {
+          sendStatus.textContent = `Error: ${e}`;
+          items = newItems;
+          return;
+        }
+        if (res.status !== 201) {
+          try {
+            sendStatus.innerText = `Error: ${res.status} ${res.statusText}, ${JSON.stringify(await res.json())}`;
+          } catch {
+            sendStatus.innerText = `Error: ${res.status} ${res.statusText}`;
+          }
+          items = newItems;
+          return;
+        }
+        allTrs[0].remove();
+        allTrs.shift();
+        newItems.shift();
+      }
+      sendStatus.textContent = 'OK';
+      sendProgress.value = items.length;
+      items = newItems;
+    }
+    const sendFast = async () => {
+      let sentCount = 0;
+      let okCount = 0;
+      sendStatus.textContent = `送信中... (0/${items.length})`;
+      sendProgress.max = items.length;
+      sendProgress.value = 0;
+      sendProgress.textContent = `0/${items.length}`;
+      /** @type {PromiseSettledResult<void>[]} */
+      let lastResults = [];
+      // Chromeでは1350回を超える同時fetchでERR_INSUFFICIENT_RESOURCESが発生し`TypeError: Failed to fetch`になるので
+      for (let tryCount = 1; tryCount <= 5; tryCount++) {
+        let errorCount = 0;
+        const results = await Promise.allSettled(items.map(async (item, i) => {
+          if (lastResults[i]) {
+            if (lastResults[i].status === 'fulfilled') {
+              return;
+            } else if (lastResults[i].reason?.status === 422) {
+              // 422 Unprocessable Entity. 入力形式に問題がある
+              throw lastResults[i].reason;
+            }
+          }
+
+          let /** @type {Response} */res, /** @type {Error | null} */resError = null;
+          try {
+            res = await fetch('/items', {
+              method: 'POST',
+              headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': csrfToken
+              },
+              body: JSON.stringify({
+                item: item
+              })
+            });
+          } catch (e) {
+            resError = e;
+          }
+          if (!resError && res?.status !== 201) {
+            try {
+              resError = new HttpError(res?.status, `Error: ${res?.status} ${res?.statusText}, ${JSON.stringify(await res?.json())}`);
+            } catch {
+              resError = new HttpError(res?.status, `Error: ${res?.status} ${res?.statusText}`);
+            }
+          }
+          resError ? errorCount++ : okCount++;
+          sendStatus.textContent = `送信中... (${++sentCount}/${items.length}, try ${tryCount}, line ${i + 1}, ok ${okCount}, error ${errorCount})`;
+          sendProgress.value = sentCount;
+          sendProgress.textContent = `${sentCount}/${items.length}`;
+          if (resError) {
+            throw resError;
+          }
+        }));
+        lastResults = results;
+      }
+      const newItems = items.slice();
+      const allTrs = Array.from(tbody.getElementsByTagName('tr')).filter(tr => !tr.classList.contains('hidden'));
+      const errorTexts = [];
+      for (const [i, value] of items.entries()) {
+        const result = lastResults[i];
+        if (result?.status === 'rejected') {
+          errorTexts.push(result.reason);
+        } else {
+          newItems[i] = null;
+          allTrs[i].remove();
+        }
+      }
+      if (errorTexts.length) {
+        sendStatus.innerText = `Complete. Error: ${errorTexts.join(', ')}`;
+      } else {
+        sendStatus.textContent = 'OK';
+      }
+      items = newItems.filter(item => item !== null);
+    }
+
+    const sendButton = /** @type {HTMLButtonElement} */(document.getElementById('sendButton'));
+    const sendFastCheckbox = /** @type {HTMLInputElement} */(document.getElementById('sendFastCheckbox'));
+    sendButton.addEventListener('click', async () => {
+      if (items.length === 0) {
+        sendStatus.textContent = 'データを取り込んでください';
+        return;
+      }
+      importToTableButton.disabled = addToTableButton.disabled = sendButton.disabled = sending = true;
+      document.title = 'DietApp: 送信中';
+      if (sendFastCheckbox.checked) {
+        await sendFast();
+      } else {
+        await sendSlow();
+      }
+      importToTableButton.disabled = addToTableButton.disabled = sendButton.disabled = sending = false;
+      document.title = 'DietApp';
+    });
+
+    const saveEditingTr = () => {
+      console.log('saving')
+      const editingTr = /** @type {HTMLTableRowElement} */(tbody.querySelector('tr.editingRow:not(.hidden)'));
+      if (!editingTr) return;
+      // `tr.rowIndex`もあるけど、`display: none`をかけた行があるときの挙動がMDNに書いてないので保留
+      const allTrs = Array.from(tbody.getElementsByTagName('tr')).filter(tr => !tr.classList.contains('hidden'));
+      const index = allTrs.indexOf(editingTr);
+      const editingInput = editingTr.getElementsByClassName('editingInput')[0];
+      const {tr, item} = makeTrAndItemFromCsvLine({line: editingInput.value, isNew: false});
+      items[index] = item;
+      editingTr.replaceWith(tr);
+    };
+    const startEditingTr = (/** @type {HTMLTableRowElement} */tr) => {
+      saveEditingTr();
+      const allTrs = Array.from(tbody.getElementsByTagName('tr')).filter(tr => !tr.classList.contains('hidden'));
+      const index = allTrs.indexOf(tr);
+      const item = items[index];
+      const vals = itemKeys.map(key => item[key]);
+      const /** @type {HTMLTableRowElement} */ editingTr = document.querySelector('tr.editingRow.hidden').cloneNode(true);
+      editingTr.classList.remove('hidden');
+      editingTr.getElementsByTagName('input')[0].value = vals.join(',');
+      tr.replaceWith(editingTr);
+    };
+    tbody.addEventListener('click', (event) => {
+      /** @type {{target: HTMLElement}} */
+      const {target} = event;
+      if (target.tagName === 'BUTTON') {
+        if (sending) return;
+        const tr = target.closest('tr');
+        const allTrs = Array.from(tbody.getElementsByTagName('tr')).filter(tr => !tr.classList.contains('hidden'));
+        const index = allTrs.indexOf(tr);
+        if (target.classList.contains('deleteButton')) {
+          tr.remove();
+          items.splice(index, 1);
+        } else if (target.classList.contains('editStartButton')) {
+          startEditingTr(tr);
+        } else if (target.classList.contains('editOkButton')) {
+          saveEditingTr();
+        }
+      }
+    });
+  })();
+</script>
