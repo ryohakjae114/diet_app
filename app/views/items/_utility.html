@@ -1,5 +1,6 @@
 <h2>まとめて入力</h2>
-<p>カンマ区切りまたはタブ区切りで入力。Excelやスプレッドシートからのコピペでも可。</p>
+<p>「<code>商品名,5,1,1,1,1</code>」のように入力し、「テーブルに取込」→「このテーブルを送信」で追加できます。商品名の重複はできません。</p>
+<p></p>カンマ区切りとタブ区切りに対応済。Excelやスプレッドシートをセルをコピーしてそのままここに貼り付けも可能。ただし列の順番は事前に揃えてください。</p>
 <textarea id="tsvArea" placeholder="ここに入力または貼り付け"></textarea><br>
 <div id="defaultValues">
   <p><label>分量の目安のデフォルト値：<input type="text" id="defaultAroundQty"></label></p>
@@ -11,7 +12,7 @@
 <p>ステータス：<span id="sendStatus"></span></p>
 <p><progress id="sendProgress" max="1" value="0">0/1</progress></p>
 <p>
-  <label title="Rails側で配列受け付けるようにしてくれたらこんなの作る必要ないんですが！！！">
+  <label>
     <input type="checkbox" id="sendFastCheckbox"> 高速送信する（順番がバラバラになります / メモリをいっぱい使います）
   </label>
   <button id="sendButton">このテーブルを送信</button>

@@ -56,6 +56,7 @@ rake assets:precompile # 初回は時間かかる
 
 # コンテナから出る
 exit
+docker compose down
 
 # 本番起動
 docker compose up -d
@@ -63,15 +64,24 @@ docker compose up -d
 
 ### アップデート
 
-`cd`コマンドで`diet_app`フォルダに入ってから
+`cd`コマンドで`diet_app`フォルダーに入ってから
 
 ```sh
 git fetch origin
-git pull origin master
+git pull origin main --ff-only
+# できなければ(mainの内容でローカルフォルダを完全初期化): git reset --hard origin/main
 
 # 以下初回起動と同じ
 docker compose build
 docker compose up
+docker compose run web bash
+
+# コンテナ内
+rake db:migrate RAILS_ENV=development
+rake assets:precompile
+exit # コンテナから出る
+docker compose down
+
 docker compose up -d
 ```
 
@@ -84,6 +94,6 @@ docker compose up -d
 rm -rf tmp/cache tmp/sockets tmp/development_secret.txt tmp/restart.txt
 
 # データベースを削除 （超注意！）
-# sudo をつけないと実行できなかったりする
+# 環境により sudo をつけないと実行できないことがある
 # rm -rf tmp/db
 ```
