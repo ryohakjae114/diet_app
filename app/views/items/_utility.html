@@ -3,6 +3,8 @@
 <p></p>カンマ区切りとタブ区切りに対応済。Excelやスプレッドシートをセルをコピーしてそのままここに貼り付けも可能。ただし列の順番は事前に揃えてください。</p>
 <textarea id="tsvArea" placeholder="ここに入力または貼り付け"></textarea><br>
 <div id="defaultValues">
+  <p><label>アイテム名先頭に入れるテキスト：<input type="text" id="itemNamePrefixInput"></label></p>
+  <p><label>アイテム名末尾に入れるテキスト：<input type="text" id="itemNameSuffixInput"></label></p>
   <p><label>分量の目安のデフォルト値：<input type="text" id="defaultAroundQty"></label></p>
   <p><label>単位のデフォルト値：<input type="text" id="defaultUnit" value="g"></label></p>
   <p><label>単位量のデフォルト値：<input type="text" id="defaultWeight" value="100"></label></p>
@@ -94,6 +96,10 @@
     const defaultWeight = /** @type {HTMLInputElement} */(document.getElementById('defaultWeight'));
     const table = /** @type {HTMLTableElement} */(document.getElementById('table'));
     const tbody = table.getElementsByTagName('tbody')[0];
+    const itemNamePrefixInput = /** @type {HTMLInputElement} */(document.getElementById('itemNamePrefixInput'));
+    const itemNameSuffixInput = /** @type {HTMLInputElement} */(document.getElementById('itemNameSuffixInput'));
+    let itemNamePrefix = '';
+    let itemNameSuffix = '';
 
     const makeTrAndItemFromCsvLine = (/** @type {{line: string, isNew: boolean | undefined}} */params) => {
       const {line, isNew} = params;
@@ -104,6 +110,7 @@
         return {tr: null, item: null};
       }
       if (isNew) {
+        vals[0] = `${itemNamePrefix}${vals[0]}${itemNameSuffix}`;
         if (!vals[6]) vals[6] = defaultAroundQty.value || '';
         if (!vals[7]) vals[7] = defaultUnit.value || '';
         if (!vals[8]) vals[8] = defaultWeight.value || '';
@@ -127,6 +134,8 @@
       return { tr, item };
     };
     const importToTable = (/** @type {{replace: boolean | undefined}} */options) => {
+      itemNamePrefix = itemNamePrefixInput.value;
+      itemNameSuffix = itemNameSuffixInput.value;
       const lines = tsvArea.value.split(/\r\n|\r|\n/);
       if (options.replace) {
         items = [];
@@ -322,6 +331,7 @@
         if (target.classList.contains('deleteButton')) {
           tr.remove();
           items.splice(index, 1);
+          sendStatus.textContent = `${items.length} 個`;
         } else if (target.classList.contains('editStartButton')) {
           startEditingTr(tr);
         } else if (target.classList.contains('editOkButton')) {
