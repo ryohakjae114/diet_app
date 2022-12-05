@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
   root "admins#top"
-  resources :recipes
+
+  resources :recipes, shallow: true do
+    member do
+      resources :recipe_items, only: [:index, :new, :create, :destroy]
+    end
+  end
   resources :items
 
   devise_for :admins, controllers: {

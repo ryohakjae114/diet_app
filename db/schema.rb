@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_21_075103) do
+ActiveRecord::Schema.define(version: 2022_12_05_074021) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -48,16 +48,17 @@ ActiveRecord::Schema.define(version: 2022_11_21_075103) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["item_id"], name: "index_recipe_items_on_item_id"
+    t.index ["recipe_id", "item_id"], name: "index_recipe_items_on_recipe_id_and_item_id", unique: true
     t.index ["recipe_id"], name: "index_recipe_items_on_recipe_id"
   end
 
   create_table "recipes", force: :cascade do |t|
     t.string "img_url"
     t.string "name"
-    t.decimal "protein"
-    t.decimal "fat"
-    t.decimal "carb"
-    t.decimal "df"
+    t.decimal "protein", default: "0.0"
+    t.decimal "fat", default: "0.0"
+    t.decimal "carb", default: "0.0"
+    t.decimal "df", default: "0.0"
     t.integer "cook_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
