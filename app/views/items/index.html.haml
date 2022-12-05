@@ -2,9 +2,10 @@
 
 =will_paginate @items
 
-%table.table
+%table.table.table-bordered
   %thead
     %tr
+      %th ID
       %th アイテム名
       %th カロリー(kcal)
       %th タンパク質(g)
@@ -19,6 +20,7 @@
   %tbody
     - @items.each do |item|
       %tr
+        %td= item.id
         %td= item.name
         %td= item.kcal
         %td= item.protein

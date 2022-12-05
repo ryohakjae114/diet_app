@@ -7,17 +7,9 @@ class RecipesController < ApplicationController
     @recipes = Recipe.paginate(page: params[:page], per_page: 1000)
   end
 
-  # GET /recipes/1 or /recipes/1.json
-  def show
-  end
-
   # GET /recipes/new
   def new
     @recipe = Recipe.new
-  end
-
-  # GET /recipes/1/edit
-  def edit
   end
 
   # POST /recipes or /recipes.json
@@ -33,6 +25,14 @@ class RecipesController < ApplicationController
         format.json { render json: @recipe.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+  # GET /recipes/1 or /recipes/1.json
+  def show
+  end
+
+  # GET /recipes/1/edit
+  def edit
   end
 
   # PATCH/PUT /recipes/1 or /recipes/1.json
@@ -59,11 +59,6 @@ class RecipesController < ApplicationController
   end
 
   private
-
-  # Use callbacks to share common setup or constraints between actions.
-  def set_recipe
-    @recipe = Recipe.find(params[:id])
-  end
 
   # Only allow a list of trusted parameters through.
   def recipe_params

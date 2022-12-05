@@ -2,10 +2,6 @@ class ItemsController < ApplicationController
   before_action :authenticate_admin!
   before_action :set_item, only: %i[ show edit update destroy ]
 
-  # GET /
-  def top
-  end
-
   # GET /items or /items.json
   def index
     @items = Item.paginate(page: params[:page], per_page: 1000)

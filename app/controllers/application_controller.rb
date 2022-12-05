@@ -4,19 +4,24 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def authenticate_admin!
-    unless admin_signed_in?
-      redirect_to new_admin_session_url, alert: "ログインしてください"
+    # Use callbacks to share common setup or constraints between actions.
+    def set_recipe
+      @recipe = Recipe.find(params[:id])
     end
-  end
 
-  def current_admin
-    if admin_signed_in?
-      Admin.find_by(id: warden.user.id)
+    def authenticate_admin!
+      unless admin_signed_in?
+        redirect_to new_admin_session_url, alert: "ログインしてください"
+      end
     end
-  end
 
-  def admin_signed_in?
-    !!(warden.user)
-  end
+    def current_admin
+      if admin_signed_in?
+        Admin.find_by(id: warden.user.id)
+      end
+    end
+
+    def admin_signed_in?
+      !!(warden.user)
+    end
 end
