@@ -10,6 +10,7 @@ class RecipeItemsController < ApplicationController
   # GET /recipes/1/recipe_items/new
   def new
     @recipe_item = @recipe.recipe_items.build
+    @recipe_item.kcal = ''
   end
 
   # POST /recipes/1/recipe_items or /recipes/1/recipe_items.json
@@ -38,7 +39,7 @@ class RecipeItemsController < ApplicationController
     @recipe_item.destroy
 
     respond_to do |format|
-      format.html { redirect_to @recipe, notice: "RecipeItem was successfully destroyed." }
+      format.html { redirect_to @recipe, notice: "アイテムは削除されました" }
       format.json { head :no_content }
     end
   end
