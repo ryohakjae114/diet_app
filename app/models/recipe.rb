@@ -42,9 +42,9 @@ class Recipe < ApplicationRecord
       #乗数
       multiplier =
       if recipe_item.kcal
-        (1.0 / item.kcal)  * recipe_item.kcal
+        ((1.0 / item.kcal).round(2))  * recipe_item.kcal
       else
-        (1.0 / item.weight)* recipe_item.weight
+        ((1.0 / item.weight).round(2))* recipe_item.weight
       end
 
       #各栄養素の増減量
