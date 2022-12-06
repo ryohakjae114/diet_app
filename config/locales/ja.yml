@@ -3,6 +3,7 @@ ja:
     models:
       item: "アイテム"
       recipe: "レシピ"
+      recipe_item: "レシピのアイテム"
     attributes:
       item:
         name: "アイテム名"
@@ -21,3 +22,7 @@ ja:
         item: "アイテムID"
         weight: "グラム"
         cook_at: "外食・市販or一般料理"
+      recipe_item:
+        item_id: "アイテムID"
+        kcal: "カロリー"
+        weight: "重量"

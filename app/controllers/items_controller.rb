@@ -2,22 +2,21 @@ class ItemsController < ApplicationController
   before_action :authenticate_admin!
   before_action :set_item, only: %i[ show edit update destroy ]
 
+  # GET /items/search or /items.json
+  def search
+    keyword = params[:keyword]
+    @items = Item.where("name LIKE ?", '%'+keyword+'%').paginate(page: params[:page], per_page: 1000)
+    render :index
+  end
+
   # GET /items or /items.json
   def index
     @items = Item.paginate(page: params[:page], per_page: 1000)
   end
 
-  # GET /items/1 or /items/1.json
-  def show
-  end
-
   # GET /items/new
   def new
     @item = Item.new
-  end
-
-  # GET /items/1/edit
-  def edit
   end
 
   # POST /items or /items.json
@@ -26,7 +25,7 @@ class ItemsController < ApplicationController
 
     respond_to do |format|
       if @item.save
-        format.html { redirect_to item_url(@item), notice: "Item was successfully created." }
+        format.html { redirect_to item_url(@item), notice: "アイテムが作成されました" }
         format.json { render :show, status: :created, location: @item }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -35,11 +34,19 @@ class ItemsController < ApplicationController
     end
   end
 
+  # GET /items/1 or /items/1.json
+  def show
+  end
+
+  # GET /items/1/edit
+  def edit
+  end
+
   # PATCH/PUT /items/1 or /items/1.json
   def update
     respond_to do |format|
       if @item.update(item_params)
-        format.html { redirect_to item_url(@item), notice: "Item was successfully updated." }
+        format.html { redirect_to item_url(@item), notice: "アイテムが更新されました" }
         format.json { render :show, status: :ok, location: @item }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -53,7 +60,7 @@ class ItemsController < ApplicationController
     @item.destroy
 
     respond_to do |format|
-      format.html { redirect_to items_url, notice: "Item was successfully destroyed." }
+      format.html { redirect_to items_url, notice: "アイテムが削除されました" }
       format.json { head :no_content }
     end
   end

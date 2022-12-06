@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_05_074021) do
+ActiveRecord::Schema.define(version: 2022_12_06_051652) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -27,24 +27,24 @@ ActiveRecord::Schema.define(version: 2022_12_05_074021) do
 
   create_table "items", force: :cascade do |t|
     t.string "name"
-    t.decimal "kcal"
-    t.decimal "protein"
-    t.decimal "fat"
-    t.decimal "carb"
-    t.decimal "df"
+    t.decimal "kcal", precision: 8, scale: 3, default: "0.0"
+    t.decimal "protein", precision: 8, scale: 3, default: "0.0"
+    t.decimal "fat", precision: 8, scale: 3, default: "0.0"
+    t.decimal "carb", precision: 8, scale: 3, default: "0.0"
+    t.decimal "df", precision: 8, scale: 3, default: "0.0"
     t.string "around_qty"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "unit"
-    t.decimal "weight"
+    t.decimal "weight", precision: 8, scale: 3, default: "0.0"
     t.index ["name"], name: "index_items_on_name", unique: true
   end
 
   create_table "recipe_items", force: :cascade do |t|
     t.bigint "recipe_id"
     t.bigint "item_id"
-    t.decimal "kcal"
-    t.decimal "weight"
+    t.decimal "kcal", precision: 8, scale: 3, default: "0.0"
+    t.decimal "weight", precision: 8, scale: 3, default: "0.0"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["item_id"], name: "index_recipe_items_on_item_id"
@@ -55,14 +55,14 @@ ActiveRecord::Schema.define(version: 2022_12_05_074021) do
   create_table "recipes", force: :cascade do |t|
     t.string "img_url"
     t.string "name"
-    t.decimal "protein", default: "0.0"
-    t.decimal "fat", default: "0.0"
-    t.decimal "carb", default: "0.0"
-    t.decimal "df", default: "0.0"
+    t.decimal "protein", precision: 8, scale: 3, default: "0.0"
+    t.decimal "fat", precision: 8, scale: 3, default: "0.0"
+    t.decimal "carb", precision: 8, scale: 3, default: "0.0"
+    t.decimal "df", precision: 8, scale: 3, default: "0.0"
     t.integer "cook_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.decimal "kcal"
+    t.decimal "kcal", precision: 8, scale: 3, default: "0.0"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -75,8 +75,8 @@ ActiveRecord::Schema.define(version: 2022_12_05_074021) do
     t.datetime "remember_created_at"
     t.string "nickname", limit: 30
     t.string "email", limit: 127
-    t.decimal "height", precision: 6, scale: 3
-    t.decimal "weight", precision: 6, scale: 3
+    t.decimal "height", precision: 8, scale: 3, default: "0.0"
+    t.decimal "weight", precision: 8, scale: 3, default: "0.0"
     t.integer "gender", limit: 2
     t.date "birthday"
     t.text "tokens"

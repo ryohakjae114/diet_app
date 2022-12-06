@@ -11,10 +11,10 @@
     = form.label :item_id
     = form.text_field :item_id
   .field
-    = form.label :kcal
-    = form.text_field :kcal
-  .field
     = form.label :weight
-    = form.text_field :weight
+    = form.number_field :weight
+  .field
+    = form.label :kcal
+    = form.number_field :kcal
   .actions
     = form.submit
