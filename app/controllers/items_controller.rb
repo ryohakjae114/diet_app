@@ -6,7 +6,6 @@ class ItemsController < ApplicationController
   def search
     keyword = params[:keyword]
     @items = Item.where("name LIKE ?", '%'+keyword+'%').paginate(page: params[:page], per_page: 1000)
-    render :index
   end
 
   # GET /items or /items.json
@@ -67,13 +66,13 @@ class ItemsController < ApplicationController
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
-  def set_item
-    @item = Item.find(params[:id])
-  end
+    # Use callbacks to share common setup or constraints between actions.
+    def set_item
+      @item = Item.find(params[:id])
+    end
 
-  # Only allow a list of trusted parameters through.
-  def item_params
-    params.require(:item).permit(:name, :kcal, :protein, :fat, :carb, :df, :around_qty, :unit, :weight)
-  end
+    # Only allow a list of trusted parameters through.
+    def item_params
+      params.require(:item).permit(:name, :kcal, :protein, :fat, :carb, :df, :around_qty, :unit, :weight)
+    end
 end
