@@ -1,13 +1,13 @@
 %h1 アイテム　リスト
 
-= form_with(url: search_items_url, method: :get, local: true, class: "form-horizontal") do |f|
+= form_with(url: search_items_url, method: :post, local: false) do |f|
   .text-center
     = f.text_field :keyword, placeholder: "アイテム名"
     = f.submit '検索'
 
 = link_to '新規作成', new_item_path
 
-=will_paginate @items
+= will_paginate @items
 
 %table.table.table-bordered
   %thead
@@ -24,22 +24,8 @@
       %th 重量
       %th
 
-  %tbody
+  %tbody#items
     - @items.each do |item|
-      %tr
-        %td= item.id
-        %td= item.name
-        %td= item.kcal
-        %td= item.protein
-        %td= item.fat
-        %td= item.carb
-        %td= item.df
-        %td= item.around_qty
-        %td= item.unit
-        %td= item.weight
-        %td= link_to '詳細', item
-        %td= link_to '変更', edit_item_path(item)
-        %td= link_to '削除', item, method: :delete, data: { confirm: 'よろしいですか?' }
-
+      = render item
 %br
 =will_paginate @items
