@@ -1,9 +1,6 @@
 %h1 アイテム　リスト
 
-= form_with(url: search_items_url, method: :post, local: false) do |f|
-  .text-center
-    = f.text_field :keyword, placeholder: "アイテム名"
-    = f.submit '検索'
+= render 'shared/search_item_form'
 
 = link_to '新規作成', new_item_path
 
