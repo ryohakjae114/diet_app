@@ -1,4 +1,6 @@
-= form_for @item do |f|
+%h1 Editing item
+
+= form_with(url: api_v1_item_path, model: @item, local: true) do |f|
   - if @item.errors.any?
     #error_explanation
       %h2= "#{pluralize(@item.errors.count, "error")} prohibited this item from being saved:"
@@ -35,3 +37,8 @@
     = f.text_field :weight
   .actions
     = f.submit 'Save'
+
+
+= link_to 'Show', api_v1_item_path(@item)
+\|
+= link_to 'Back', api_v1_items_path

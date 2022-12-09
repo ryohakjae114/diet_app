@@ -1,4 +1,4 @@
-= form_with(url: search_items_url, method: :post, local: false) do |f|
+= form_with(url: search_api_v1_items_url, method: :post, local: false) do |f|
   .text-center
     = f.text_field :keyword, placeholder: "アイテム名", id: "text"
     = f.submit '検索', id: "button", style: "display: none"

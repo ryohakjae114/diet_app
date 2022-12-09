@@ -1,4 +1,4 @@
-class RecipesController < ApplicationController
+class Api::V1::RecipesController < ApplicationController
   before_action :authenticate_admin!
   before_action :set_recipe, only: %i[ show edit update destroy ]
 
@@ -18,8 +18,8 @@ class RecipesController < ApplicationController
 
     respond_to do |format|
       if @recipe.save
-        format.html { redirect_to recipe_url(@recipe), notice: "レシピが作成されました" }
-        format.json { render :show, status: :created, location: @recipe }
+        format.html { redirect_to api_v1_recipe_url(@recipe), notice: "レシピが作成されました" }
+        format.json { render :show, status: :created, location: api_v1_recipe_url(@recipe) }
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @recipe.errors, status: :unprocessable_entity }
@@ -39,8 +39,8 @@ class RecipesController < ApplicationController
   def update
     respond_to do |format|
       if @recipe.update(recipe_params)
-        format.html { redirect_to recipe_url(@recipe), notice: "レシピが更新されました" }
-        format.json { render :show, status: :ok, location: @recipe }
+        format.html { redirect_to api_v1_recipe_url(@recipe), notice: "レシピが更新されました" }
+        format.json { render :show, status: :ok, location: api_v1_recipe_url(@recipe) }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @recipe.errors, status: :unprocessable_entity }
@@ -53,7 +53,7 @@ class RecipesController < ApplicationController
     @recipe.destroy
 
     respond_to do |format|
-      format.html { redirect_to recipes_url, notice: "レシピは削除されました" }
+      format.html { redirect_to api_v1_recipes_url, notice: "レシピは削除されました" }
       format.json { head :no_content }
     end
   end

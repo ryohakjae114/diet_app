@@ -1,0 +1,26 @@
+= form_with(url: url, model:@recipe, local: true, class: "form-horizontal") do |f|
+  - if @recipe.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@recipe.errors.count, "error")} prohibited this recipe from being saved:"
+      %ul
+        - @recipe.errors.full_messages.each do |message|
+          %li= message
+
+  .field
+    = f.label :img_url
+    = f.text_field :img_url
+  .field
+    = f.label :name
+    = f.text_field :name
+  
+  .form-group
+    = f.label :cook_at, '一般料理', value: '一般料理', class: 'col-sm-1 control-label'
+    = f.radio_button :cook_at, '一般料理'
+  .form-group
+    = f.label :cook_at, '外食・市販', value: '外食・市販', class: 'col-xs-1 control-label'
+    = f.radio_button :cook_at, '外食・市販'
+
+  %br
+
+  .actions
+    = f.submit 'Save'

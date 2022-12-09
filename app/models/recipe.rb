@@ -3,7 +3,6 @@ class Recipe < ApplicationRecord
   has_many :items, through: :recipe_items
 
   enum cook_at: { 一般料理: 0, 外食・市販: 1 }
-
   validates :name, presence: true, uniqueness: true
   # validates :protein, numericality: true
   # validates :carb,    numericality: true

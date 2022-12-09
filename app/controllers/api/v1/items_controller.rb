@@ -1,4 +1,4 @@
-class ItemsController < ApplicationController
+class Api::V1::ItemsController < ApplicationController
   before_action :authenticate_admin!
   before_action :set_item, only: %i[ show edit update destroy ]
 
@@ -24,7 +24,7 @@ class ItemsController < ApplicationController
 
     respond_to do |format|
       if @item.save
-        format.html { redirect_to item_url(@item), notice: "アイテムが作成されました" }
+        format.html { redirect_to api_v1_item_url(@item), notice: "アイテムが作成されました" }
         format.json { render :show, status: :created, location: @item }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -45,7 +45,7 @@ class ItemsController < ApplicationController
   def update
     respond_to do |format|
       if @item.update(item_params)
-        format.html { redirect_to item_url(@item), notice: "アイテムが更新されました" }
+        format.html { redirect_to api_v1_item_url(@item), notice: "アイテムが更新されました" }
         format.json { render :show, status: :ok, location: @item }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -59,7 +59,7 @@ class ItemsController < ApplicationController
     @item.destroy
 
     respond_to do |format|
-      format.html { redirect_to items_url, notice: "アイテムが削除されました" }
+      format.html { redirect_to api_v1_items_url, notice: "アイテムが削除されました" }
       format.json { head :no_content }
     end
   end
