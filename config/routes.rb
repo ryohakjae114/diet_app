@@ -1,18 +1,18 @@
 Rails.application.routes.draw do
   root "admins#top"
 
-  resources :recipes, shallow: true do
-    member do
-      resources :recipe_items, only: [:index, :new, :create, :destroy]
-    end
-  end
+  # resources :recipes, shallow: true do
+  #   member do
+  #     resources :recipe_items, only: [:index, :new, :create, :destroy]
+  #   end
+  # end
 
-  resources :items do
-    collection do
-      #get  'search'
-      post 'search'
-    end
-  end
+  # resources :items do
+  #   collection do
+  #     #get  'search'
+  #     post 'search'
+  #   end
+  # end
 
   devise_for :admins, controllers: {
                         sessions: "admins/sessions",
@@ -25,6 +25,19 @@ Rails.application.routes.draw do
                                             sessions: "api/v1/auth/sessions",
                                             registrations: "api/v1/auth/registrations"
                                           }
+
+      resources :recipes, shallow: true do
+        member do
+          resources :recipe_items, only: [:index, :new, :create, :destroy]
+        end
+      end
+
+      resources :items do
+        collection do
+          #get  'search'
+          post 'search'
+        end
+      end
     end
   end
 end

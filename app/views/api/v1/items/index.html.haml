@@ -1,8 +1,8 @@
 %h1 アイテム　リスト
 
-= render 'shared/search_item_form'
+= render 'api/v1/shared/search_item_form'
 
-= link_to '新規作成', new_item_path
+= link_to '新規作成', new_api_v1_item_path
 
 = will_paginate @items
 
@@ -22,7 +22,6 @@
       %th
 
   %tbody#items
-    - @items.each do |item|
-      = render item
+    = render @items
 %br
 =will_paginate @items

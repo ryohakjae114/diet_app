@@ -1,5 +1,7 @@
 %h1 レシピ　リスト
 
+= link_to '新規作成', new_api_v1_recipe_path
+
 =will_paginate @items
 
 %table.table.table-bordered
@@ -26,11 +28,9 @@
         %td= recipe.carb
         %td= recipe.df
         %td= recipe.cook_at
-        %td= link_to '詳細', recipe
-        %td= link_to '変更', edit_recipe_path(recipe)
-        %td= link_to '削除', recipe, method: :delete, data: { confirm: 'Are you sure?' }
+        %td= link_to '詳細', api_v1_recipe_path(recipe)
+        %td= link_to '変更', edit_api_v1_recipe_path(recipe)
+        %td= link_to '削除', api_v1_recipe_path(recipe), method: :delete, data: { confirm: 'Are you sure?' }
 
 %br
-
-= link_to '新規作成', new_recipe_path
 =will_paginate @items

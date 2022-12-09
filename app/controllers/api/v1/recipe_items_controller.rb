@@ -1,4 +1,4 @@
-class RecipeItemsController < ApplicationController
+class Api::V1::RecipeItemsController < ApplicationController
   before_action :authenticate_admin!
   before_action :set_recipe,      only: %i[ index new create ]
   before_action :set_recipe_item, only: %i[ destroy ]
@@ -10,7 +10,8 @@ class RecipeItemsController < ApplicationController
   # GET /recipes/1/recipe_items/new
   def new
     @recipe_item = @recipe.recipe_items.build
-    @recipe_item.kcal = ''
+    @recipe_item.weight = 0.01
+    @recipe_item.kcal   = ''
   end
 
   # POST /recipes/1/recipe_items or /recipes/1/recipe_items.json
@@ -23,8 +24,8 @@ class RecipeItemsController < ApplicationController
         #レシピの各栄養素の値を更新
         @recipe.add_nutrients(@recipe_item)
 
-        format.html { redirect_to recipe_url(@recipe), notice: "アイテムが追加されました" }
-        format.json { render recipe_path(@recipe), status: :created, location: @recipe }
+        format.html { redirect_to api_v1_recipe_url(@recipe), notice: "アイテムが追加されました" }
+        format.json { render :show, status: :created, location: @recipe }
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @recipe_item.errors, status: :unprocessable_entity }
@@ -39,7 +40,7 @@ class RecipeItemsController < ApplicationController
     @recipe_item.destroy
 
     respond_to do |format|
-      format.html { redirect_to @recipe, notice: "アイテムは削除されました" }
+      format.html { redirect_to api_v1_recipe_url(@recipe), notice: "アイテムは削除されました" }
       format.json { head :no_content }
     end
   end

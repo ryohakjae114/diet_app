@@ -58,9 +58,12 @@
 <details>
   <summary>＜＜クリックで表示切替＞＞</summary>
   <h3>一括編集</h3>
-  <p>アイテム一覧のページ<input type="number" value="1" min="1" size="5" id="multiEditPageNumberInput"> を<button id="multiEditLoadPageButton">読み込み</button></p>
+  <p>アイテム一覧のページ<input type="number" value="1" min="1" size="5" id="multiEditPageNumberInput"> を<button
+      id="multiEditLoadPageButton">読み込み</button></p>
   <p>編集するアイテム選択: ※Ctrl, Shiftキーやドラッグで複数選択できます</p>
-  <p><select multiple size="15" id="multiEditSelect"><option disabled>ここにリストが表示される</option></select></p>
+  <p><select multiple size="15" id="multiEditSelect">
+      <option disabled>ここにリストが表示される</option>
+    </select></p>
   <p>
     <progress id="multiEditProgress" max="1" value="0">0/1</progress>
     <span id="multiEditStatus"></span>
@@ -73,7 +76,8 @@
   </p>
   <p>
     このテキストを:
-    <input type="text" id="multiEditReplaceWithInput" placeholder="(fuga)">に<button id="multiEditReplaceButton">置換</button>
+    <input type="text" id="multiEditReplaceWithInput" placeholder="(fuga)">に<button
+      id="multiEditReplaceButton">置換</button>
     ※アイテム名にのみ適用。<code>あいうえお(hoge)</code>というアイテムが<code>あいうえお(fuga)</code>になる
   </p>
   <p>
@@ -84,7 +88,8 @@
   <p>＜上級編＞</p>
   <p>
     このテキストを:
-    <input type="text" id="multiEditRegexpReplaceWithInput" placeholder="(fuga)">に<button id="multiEditRegExpReplaceButton">正規表現置換 (上級)</button>
+    <input type="text" id="multiEditRegexpReplaceWithInput" placeholder="(fuga)">に<button
+      id="multiEditRegExpReplaceButton">正規表現置換 (上級)</button>
     ※アイテム名だけでなく、行全体に対して適用。列区切りは<code>\t</code>。正規表現がなにか分からなければ使わないほうがよい
   </p>
   <p>
@@ -147,12 +152,12 @@
       return vals;
     };
     const createValsAndItemFromCsvLine = (/** @type {{line: string, isNew: boolean | undefined, splitter: string | undefined}} */params) => {
-      const {line, isNew} = params;
+      const { line, isNew } = params;
       const splitter = params.splitter || ',';
       const rawVals = line.split(/[\t,]/).slice(0, 9);
       const vals = Array(9).fill(null).map((_, i) => rawVals[i] || '');
       if (!vals[0]) {
-        return {vals: null, item: null};
+        return { vals: null, item: null };
       }
       if (isNew) {
         vals[0] = `${itemNamePrefix}${vals[0]}${itemNameSuffix}`;
@@ -167,11 +172,11 @@
       return { vals, item };
     };
     const createTrAndItemFromCsvLine = (/** @type {{line: string, isNew: boolean | undefined, splitter: string | undefined}} */params) => {
-      const {line, isNew} = params;
+      const { line, isNew } = params;
       const splitter = params.splitter || ',';
-      const {vals, item} = createValsAndItemFromCsvLine({line, isNew, splitter});
+      const { vals, item } = createValsAndItemFromCsvLine({ line, isNew, splitter });
       if (!vals) {
-        return {tr: null, item: null};
+        return { tr: null, item: null };
       }
       const tr = document.createElement('tr');
       vals.forEach(val => {
@@ -197,7 +202,7 @@
         Array.from(tbody.getElementsByTagName('tr')).filter(tr => !tr.classList.contains('hidden')).forEach(tr => tr.remove());
       }
       lines.forEach(line => {
-        const {tr, item} = createTrAndItemFromCsvLine({line, isNew: true});
+        const { tr, item } = createTrAndItemFromCsvLine({ line, isNew: true });
         if (tr !== null) {
           tbody.appendChild(tr);
           items.push(item);
@@ -207,11 +212,11 @@
     }
     const importToTableButton = /** @type {HTMLButtonElement} */(document.getElementById('importToTableButton'));
     importToTableButton.addEventListener('click', () => {
-      importToTable({replace: true});
+      importToTable({ replace: true });
     });
     const addToTableButton = /** @type {HTMLButtonElement} */(document.getElementById('addToTableButton'));
     addToTableButton.addEventListener('click', () => {
-      importToTable({replace: false});
+      importToTable({ replace: false });
     });
 
     const sendStatus = /** @type {HTMLDivElement} */(document.getElementById('sendStatus'));
@@ -226,7 +231,7 @@
         sendProgress.textContent = `${i}/${items.length}`;
         let /** @type {Response} */res
         try {
-          res = await fetch('/items', {
+          res = await fetch('/api/v1/items', {
             method: 'POST',
             headers: {
               'Accept': 'application/json',
@@ -283,7 +288,7 @@
 
           let /** @type {Response} */res, /** @type {Error | null} */resError = null;
           try {
-            res = await fetch('/items', {
+            res = await fetch('/api/v1/items', {
               method: 'POST',
               headers: {
                 'Accept': 'application/json',
@@ -360,7 +365,7 @@
       const allTrs = Array.from(tbody.getElementsByTagName('tr')).filter(tr => !tr.classList.contains('hidden'));
       const index = allTrs.indexOf(editingTr);
       const editingInput = editingTr.getElementsByClassName('editingInput')[0];
-      const {tr, item} = createTrAndItemFromCsvLine({line: editingInput.value, isNew: false});
+      const { tr, item } = createTrAndItemFromCsvLine({ line: editingInput.value, isNew: false });
       items[index] = item;
       editingTr.replaceWith(tr);
     };
@@ -377,7 +382,7 @@
     };
     tbody.addEventListener('click', (event) => {
       /** @type {{target: HTMLElement}} */
-      const {target} = event;
+      const { target } = event;
       if (target.tagName === 'BUTTON') {
         if (sending) return;
         const tr = target.closest('tr');
@@ -409,8 +414,8 @@
       if (!pageNumber) return;
       sending = true;
       multiEditStatus.textContent = `読み込み中`;
-       try {
-        const res = await fetch(`/items.json?page=${pageNumber}`, {
+      try {
+        const res = await fetch(`/api/v1/items.json?page=${pageNumber}`, {
           headers: {
             'X-CSRF-Token': csrfToken,
           },
@@ -460,13 +465,13 @@
           const i = parseInt(option.value);
           const item = multiEditItems[i];
           item.name = `${prefix}${item.name}`;
-          const res = await fetch(`/items/${item.id}.json`, {
+          const res = await fetch(`/api/v1/items/${item.id}.json`, {
             method: 'PATCH',
             headers: {
               'Content-Type': 'application/json',
               'X-CSRF-Token': csrfToken,
             },
-            body: JSON.stringify({item}),
+            body: JSON.stringify({ item }),
           });
           if (res.status >= 400) {
             try {
@@ -507,13 +512,13 @@
           const i = parseInt(option.value);
           const item = multiEditItems[i];
           item.name = `${item.name}${suffix}`;
-          const res = await fetch(`/items/${item.id}.json`, {
+          const res = await fetch(`/api/v1/items/${item.id}.json`, {
             method: 'PATCH',
             headers: {
               'Content-Type': 'application/json',
               'X-CSRF-Token': csrfToken,
             },
-            body: JSON.stringify({item}),
+            body: JSON.stringify({ item }),
           });
           if (res.status >= 400) {
             try {
@@ -559,13 +564,13 @@
           const oldItemName = item.name;
           item.name = item.name.replace(replace, replaceWith);
           if (oldItemName === item.name) continue;
-          const res = await fetch(`/items/${item.id}.json`, {
+          const res = await fetch(`/api/v1/items/${item.id}.json`, {
             method: 'PATCH',
             headers: {
               'Content-Type': 'application/json',
               'X-CSRF-Token': csrfToken,
             },
-            body: JSON.stringify({item}),
+            body: JSON.stringify({ item }),
           });
           if (res.status >= 400) {
             try {
@@ -623,15 +628,15 @@
           const oldLine = createValsFromItem(oldItem).join('\t');
           const newLine = oldLine.replace(replace, replaceWith);
           if (oldLine === newLine) continue;
-          const {vals: newVals, item} = createValsAndItemFromCsvLine({line: newLine, isNew: false, splitter: '\t'});
+          const { vals: newVals, item } = createValsAndItemFromCsvLine({ line: newLine, isNew: false, splitter: '\t' });
           item.id = oldItem.id;
-          const res = await fetch(`/items/${item.id}.json`, {
+          const res = await fetch(`/api/v1/items/${item.id}.json`, {
             method: 'PATCH',
             headers: {
               'Content-Type': 'application/json',
               'X-CSRF-Token': csrfToken,
             },
-            body: JSON.stringify({item}),
+            body: JSON.stringify({ item }),
           });
           if (res.status >= 400) {
             try {
@@ -674,13 +679,13 @@
           const oldItemName = item.name;
           item.name = item.name.replace(deleteFromItemName, '');
           if (oldItemName === item.name) continue;
-          const res = await fetch(`/items/${item.id}.json`, {
+          const res = await fetch(`/api/v1/items/${item.id}.json`, {
             method: 'PATCH',
             headers: {
               'Content-Type': 'application/json',
               'X-CSRF-Token': csrfToken,
             },
-            body: JSON.stringify({item}),
+            body: JSON.stringify({ item }),
           });
           if (res.status >= 400) {
             throw new HttpError(res.status, `Error: ${res.status} ${res.statusText}`);
@@ -704,12 +709,9 @@
       const selectedOptions = Array.from(multiEditSelect.selectedOptions);
       if (selectedOptions.length === 0) return;
       if (!confirm(
-        `選択した${
-          selectedOptions.length
-        }件のアイテムを⚠︎⚠︎⚠︎削除⚠︎⚠︎⚠︎します。本当によろしいですか？本当に？？？\n${
-          selectedOptions.length < 100 ?
-          `削除項目：「${
-            selectedOptions.map(o => multiEditItems[o.value].name).join('」,「')
+        `選択した${selectedOptions.length
+        }件のアイテムを⚠︎⚠︎⚠︎削除⚠︎⚠︎⚠︎します。本当によろしいですか？本当に？？？\n${selectedOptions.length < 100 ?
+          `削除項目：「${selectedOptions.map(o => multiEditItems[o.value].name).join('」,「')
           }」` : ''
         }`
       )) return;
@@ -721,7 +723,7 @@
           multiEditStatus.textContent = `${sendingIndex}/${selectedOptions.length}`;
           const i = parseInt(option.value);
           const item = multiEditItems[i];
-          const res = await fetch(`/items/${item.id}.json`, {
+          const res = await fetch(`/api/v1/items/${item.id}.json`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
