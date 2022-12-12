@@ -6,4 +6,9 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
           :recoverable, :rememberable, :validatable
   include DeviseTokenAuth::Concerns::User
+
+  enum gender: { male: 0, female: 1 }
+
+  has_one :diary, dependent: :destroy
+  has_many :posts
 end
