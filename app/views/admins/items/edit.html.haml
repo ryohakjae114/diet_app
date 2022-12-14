@@ -1,0 +1,44 @@
+%h1 Editing item
+
+= form_with(url: admins_item_path, model: @item, local: true) do |f|
+  - if @item.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@item.errors.count, "error")} prohibited this item from being saved:"
+      %ul
+        - @item.errors.full_messages.each do |message|
+          %li= message
+
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :kcal
+    = f.text_field :kcal
+  .field
+    = f.label :protein
+    = f.text_field :protein
+  .field
+    = f.label :fat
+    = f.text_field :fat
+  .field
+    = f.label :carb
+    = f.text_field :carb
+  .field
+    = f.label :df
+    = f.text_field :df
+  .field
+    = f.label :around_qty
+    = f.text_field :around_qty
+  .field
+    = f.label :unit
+    = f.text_field :unit
+  .field
+    = f.label :weight
+    = f.text_field :weight
+  .actions
+    = f.submit 'Save'
+
+
+= link_to 'Show', admins_item_path(@item)
+\|
+= link_to 'Back', admins_items_path
