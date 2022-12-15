@@ -3,6 +3,10 @@ Rails.application.routes.draw do
 
   #管理者機能
   namespace :admins do
+    
+    #ユーザの作成はseedファイルから
+    resources :users, only: [:index, :show, :edit, :update, :destroy]
+    
     resources :recipes, shallow: true do
       member do
         resources :recipe_items, only: [:index, :new, :create, :destroy]
@@ -15,13 +19,13 @@ Rails.application.routes.draw do
       end
     end
     
-    resources :posts
+    resources :posts, only: [:index, :show, :edit, :update, :destroy]
   end
 
   devise_for :admins, controllers: {
                         sessions: "admins/auth/sessions",
                         registrations: "admins/auth/registrations"
-                      }
+  }
 
   namespace :api do
     namespace :v1 do
