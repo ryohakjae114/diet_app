@@ -4,6 +4,7 @@ ja:
       item: "アイテム"
       recipe: "レシピ"
       recipe_item: "レシピのアイテム"
+      post: "投稿"
     attributes:
       item:
         name: "アイテム名"
@@ -26,3 +27,6 @@ ja:
         item_id: "アイテムID"
         kcal: "カロリー"
         weight: "重量"
+      post:
+        user: "ユーザ"
+        text: "テキスト"

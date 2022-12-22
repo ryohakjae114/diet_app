@@ -1,18 +1,28 @@
-%p#notice= notice
+-breadcrumb :users
+
 %h1 Users
-%table.table
+
+%table.table.table-bordered
   %thead
     %tr
       %th id
       %th ニックネーム
       %th 性別
-      %th{:colspan => "3"}
+      %th 利用制限状態
+      %th updated_at
+      %th{:colspan => "2"}
   %tbody
     - @users.each do |user|
+      - diary = user.diary
       %tr
         %td= user.id
         %td= user.nickname
         %td= user.gender
-        %td= link_to 'Show', admins_user_path(user)
-        %td= link_to 'Edit', edit_admins_user_path(user)
-        %td= link_to 'Destroy', admins_user_path(user), method: :delete, data: { confirm: 'Are you sure?' }
+        %td
+          - if user.activated? == false
+            %span.label.label-danger アカウント停止状態
+          - if user.is_suspended_diary?
+            %span.label.label-danger 日記機能停止状態
+        %td= user.updated_at
+        %td= link_to '制限変更', edit_admins_user_path(user)
+        %td= link_to("投稿一覧", admins_posts_path(user_id: user.id))

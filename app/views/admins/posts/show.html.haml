@@ -1,12 +1,14 @@
 %p#notice= notice
 
 %p
-  %b User:
-  = @post.user
+  %b ユーザID:
+  = @post.user_id
 %p
-  %b Text:
+  %b テキスト:
   = @post.text
 
-= link_to 'Edit', edit_post_path(@post)
+%td= link_to '削除', admins_post_path(@post), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger"
+
+%br
 \|
-= link_to 'Back', posts_path
+=link_to 'Back', admins_posts_path(user_id: @post.user_id)

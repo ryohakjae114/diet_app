@@ -25,33 +25,47 @@
 # end
 
 #ユーザのサンプルデータ作成
-30.times do |num|
-  height = rand(160..200)
-  weight = rand(40..150)
-  gender =
-  if rand(2) == 0
-    "male"
-  else
-    "female"
-  end
-  birthday = Date.new(rand(1940..2010), rand(1..12), rand(1..29))
-  nickname = Faker::Name.last_name
+# 30.times do |num|
+#   height = rand(160..200)
+#   weight = rand(40..150)
+#   gender =
+#   if rand(2) == 0
+#     "male"
+#   else
+#     "female"
+#   end
+#   birthday = Date.new(rand(1940..2010), rand(1..12), rand(1..29))
+#   nickname = Faker::Name.last_name
 
-  User.create!(email: "sample#{num}@example.com", height: height, weight: weight, gender: gender,
-            birthday: birthday, password: "12341234", nickname: nickname)
+#   User.create!(email: "sample#{num}@example.com", height: height, weight: weight, gender: gender,
+#             birthday: birthday, password: "12341234", nickname: nickname)
 
-end
+# end
 
-#日記投稿のサンプルデータ作成
+#ユーザの日記のプロフィールのサンプルデータ作成
+# users = User.all
+
+# users.each do |user|
+#   introduction = Faker::Lorem.sentence(word_count: 10)
+#   public_diary = 
+#     rand(2) == 0 ? true : false
+#   public_body  = 
+#     rand(2) == 0 ? true : false
+
+#   diary = user.build_diary(introduction: introduction, public_diary: public_diary, public_body: public_body)
+#   diary.save
+# end
+
+#postのサンプルデータ作成
 users = User.all
 
 users.each do |user|
-  introduction = Faker::Lorem.sentence(word_count: 10)
-  public_diary = 
-    rand(2) == 0 ? true : false
-  public_body  = 
-    rand(2) == 0 ? true : false
+  3.times do |time|
+    text = Faker::Lorem.sentence(word_count: 20)
+    text = user.posts.build(text: text)
+    datetime = DateTime.now - time
+    text.created_at, text.updated_at = datetime
 
-  diary = user.build_diary(introduction: introduction, public_diary: public_diary, public_body: public_body)
-  diary.save
+    text.save
+  end
 end

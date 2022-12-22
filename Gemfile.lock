@@ -105,6 +105,9 @@ GEM
     ffi (1.15.5)
     globalid (1.0.0)
       activesupport (>= 5.0)
+    gretel (4.4.0)
+      actionview (>= 5.1, < 7.1)
+      railties (>= 5.1, < 7.1)
     haml (6.0.10)
       temple (>= 0.8.2)
       thor
@@ -273,6 +276,7 @@ DEPENDENCIES
   devise_token_auth
   erb2haml
   faker (= 2.20.0)
+  gretel
   haml-rails
   jbuilder (~> 2.7)
   listen (~> 3.2)

@@ -28,6 +28,9 @@ gem "devise-i18n"
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
+#パンくずリスト
+gem 'gretel'
+
 #ページネーション
 gem "will_paginate"
 gem "bootstrap-will_paginate"
