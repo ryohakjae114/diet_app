@@ -3,7 +3,13 @@ class Admins::PostsController < ApplicationController
 
   # GET /posts or /posts.json
   def index
-    @posts = Post.all
+    @user  = User.find_by(id: params['user_id'])
+    @posts = 
+      if @user
+        @user.posts
+      else
+        Post.all
+      end
   end
 
   # GET /posts/1 or /posts/1.json

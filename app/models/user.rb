@@ -11,4 +11,13 @@ class User < ActiveRecord::Base
 
   has_one :diary, dependent: :destroy
   has_many :posts
+
+  validates :activated, inclusion: { in: [true, false] }
+
+  #diaryが存在し利用停止状態になっている場合trueを返す
+  def is_suspended_diary?
+    if self.diary.present?
+      !(self.diary.activated?)
+    end
+  end
 end

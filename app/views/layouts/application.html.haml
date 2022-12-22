@@ -8,14 +8,16 @@
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
   %body
-    - if notice
-      .alert.alert-success.mt-2.alert-dismissible
-        = notice
-        %button.close{"data-dismiss" => "alert", :type => "button"} ×
+    .container
+      - if notice
+        .alert.alert-success.mt-2.alert-dismissible
+          = notice
+          %button.close{"data-dismiss" => "alert", :type => "button"} ×
 
-    - if alert
-      .alert.alert-danger.mt-2.alert-dismissible
-        = alert
-        %button.close{"data-dismiss" => "alert", :type => "button"} ×
-        
-    =yield
+      - if alert
+        .alert.alert-danger.mt-2.alert-dismissible
+          = alert
+          %button.close{"data-dismiss" => "alert", :type => "button"} ×
+          
+      = breadcrumbs separator: " &rsaquo; "
+      =yield

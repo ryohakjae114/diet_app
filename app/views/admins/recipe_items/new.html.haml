@@ -1,3 +1,4 @@
+-breadcrumb :recipe_item_new, @recipe
 %h1 アイテムを追加
 = form_with(url: admins_recipe_items_path, model: @recipe_item, local: true) do |form|
   - if @recipe_item.errors.any?

@@ -5,7 +5,9 @@ Rails.application.routes.draw do
   namespace :admins do
     
     #ユーザの作成はseedファイルから
-    resources :users, only: [:index, :show, :edit, :update, :destroy]
+    resources :users, only: [:index, :edit, :update, :destroy]
+
+    resources :diaries, only: :update
     
     resources :recipes, shallow: true do
       member do
@@ -19,7 +21,7 @@ Rails.application.routes.draw do
       end
     end
     
-    resources :posts, only: [:index, :show, :edit, :update, :destroy]
+    resources :posts, only: [:index, :show, :update, :destroy]
   end
 
   devise_for :admins, controllers: {
