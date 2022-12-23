@@ -14,8 +14,10 @@ class Recipe < ApplicationRecord
 
     #各栄養素の増量後の値
     after = { protein: self.protein + increase[:protein], carb: self.carb + increase[:carb],
-                  fat: self.fat + increase[:fat],           df: self.df + increase[:df] }
-    update_columns(protein: after[:protein], carb: after[:carb], fat: after[:fat], df: after[:df])
+                  fat: self.fat + increase[:fat],           df: self.df + increase[:df],
+                  kcal: self.kcal + increase[:kcal] }
+
+    update_columns(protein: after[:protein], carb: after[:carb], fat: after[:fat], df: after[:df], kcal: after[:kcal])
   end
 
   def sub_nutrients(recipe_item)
@@ -23,8 +25,10 @@ class Recipe < ApplicationRecord
 
     #各栄養素の減量後の値
     after = { protein: self.protein - decrease[:protein], carb: self.carb - decrease[:carb],
-                  fat: self.fat - decrease[:fat],           df: self.df - decrease[:df] }
-    update_columns(protein: after[:protein], carb: after[:carb], fat: after[:fat], df: after[:df])
+                  fat: self.fat - decrease[:fat],           df: self.df - decrease[:df],
+                  kcal: self.kcal - decrease[:kcal] }
+
+    update_columns(protein: after[:protein], carb: after[:carb], fat: after[:fat], df: after[:df], kcal: after[:kcal])
   end
 
   #recipe_idとitem_idに紐ずく、中間テーブルのデータを返す
@@ -48,6 +52,6 @@ class Recipe < ApplicationRecord
 
       #各栄養素の増減量
       fluctuation  = {protein: item.protein*multiplier, carb: item.carb*multiplier,
-                          fat: item.fat*multiplier,       df: item.df*multiplier }
+                          fat: item.fat*multiplier,       df: item.df*multiplier, kcal: item.kcal*multiplier }
     end
 end

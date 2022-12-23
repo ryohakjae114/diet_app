@@ -15,6 +15,7 @@
       %th 脂質(g)
       %th 炭水化物(g)
       %th 食物繊維(g)
+      %th カロリー(g)
       %th 一般料理or外食・市販
       %th
       %th
@@ -29,6 +30,7 @@
         %td= recipe.fat
         %td= recipe.carb
         %td= recipe.df
+        %td= recipe.kcal
         %td= recipe.cook_at
         %td= link_to '詳細', admins_recipe_path(recipe)
         %td= link_to '変更', edit_admins_recipe_path(recipe)
