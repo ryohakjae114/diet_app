@@ -15,9 +15,6 @@
   .field
     = form.label :weight
     = form.number_field :weight, min: 0.01,step: 0.01
-  .field
-    = form.label :kcal
-    = form.number_field :kcal,   min: 0.01, step: 0.01
   .actions
     = form.submit
 = link_to 'Back', admins_recipe_path(@recipe)

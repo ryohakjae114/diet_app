@@ -11,12 +11,18 @@ class Admins::RecipeItemsController < ApplicationController
   def new
     @recipe_item = @recipe.recipe_items.build
     @recipe_item.weight = 0.01
-    @recipe_item.kcal   = ''
   end
 
   # POST /recipes/1/recipe_items or /recipes/1/recipe_items.json
   def create
     @recipe_item = @recipe.recipe_items.build(recipe_params)
+    item = @recipe_item.item
+
+    if @recipe_item.weight.nil?
+      @recipe_item.weight = (@recipe_item.kcal / item.kcal) * item.weight
+    else
+      @recipe_item.kcal   = (@recipe_item.weight / item.weight) * item.kcal
+    end
 
     respond_to do |format|
       if @recipe_item.save
