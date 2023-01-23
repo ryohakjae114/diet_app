@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_21_074240) do
+ActiveRecord::Schema.define(version: 2023_01_21_130054) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -49,7 +49,9 @@ ActiveRecord::Schema.define(version: 2022_12_21_074240) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "unit"
     t.decimal "weight", precision: 8, scale: 3, default: "0.0"
+    t.uuid "user_id"
     t.index ["name"], name: "index_items_on_name", unique: true
+    t.index ["user_id"], name: "index_items_on_user_id"
   end
 
   create_table "posts", force: :cascade do |t|
@@ -110,5 +112,6 @@ ActiveRecord::Schema.define(version: 2022_12_21_074240) do
   end
 
   add_foreign_key "diaries", "users"
+  add_foreign_key "items", "users"
   add_foreign_key "posts", "users"
 end
