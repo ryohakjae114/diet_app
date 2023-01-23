@@ -4,23 +4,18 @@ Rails.application.routes.draw do
   #管理者機能
   namespace :admins do
     
-    #ユーザの作成はseedファイルから
     resources :users, only: [:index, :edit, :update, :destroy]
-
     resources :diaries, only: :update
-    
     resources :recipes, shallow: true do
       member do
         resources :recipe_items, only: [:index, :new, :create, :destroy]
       end
     end
-
     resources :items do
       collection do
         post 'search'
       end
     end
-    
     resources :posts, only: [:index, :show, :update, :destroy]
   end
 
@@ -31,6 +26,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+      resources :my_items, only: [:index, :create, :show, :update, :destroy]
       mount_devise_token_auth_for "User", at: "auth", controllers: {
                                             sessions:      "api/v1/auth/sessions",
                                             registrations: "api/v1/auth/registrations",
