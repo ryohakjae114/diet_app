@@ -24,4 +24,10 @@ class ApplicationController < ActionController::Base
     def admin_signed_in?
       !!(warden.user)
     end
+
+    def check_data_owner(data)
+      unless current_api_v1_user == data.user
+        render json: { status: "ERROR", message: "Not current_user's data"}
+      end
+    end
 end
