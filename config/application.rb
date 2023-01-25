@@ -16,7 +16,7 @@ module DietApp
     config.action_view.embed_authenticity_token_in_remote_forms = true
     #　アプリケーションを日本時間に
     config.time_zone = 'Tokyo'
-    #scaffoldをapiとして作成したいので一時的に。このアプリはapiだけでなく、しっくりこないので後で消す。
+    #scaffoldをapiとして作成したい時に一時的に。
     #config.api_only = true
   end
 end

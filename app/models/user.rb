@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
   has_one  :diary, dependent: :destroy
   has_many :posts
   has_many :items
+  has_many :recipes
 
   validates :activated, inclusion: { in: [true, false] }
 

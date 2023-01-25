@@ -1,6 +1,7 @@
 class Recipe < ApplicationRecord
   has_many :recipe_items
   has_many :items, through: :recipe_items
+  belongs_to :user, optional: true
 
   enum cook_at: { 一般料理: 0, 外食・市販: 1 }
   validates :name, presence: true, uniqueness: true
