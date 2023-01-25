@@ -11,13 +11,13 @@ class Api::V1::MyItemsController < ApplicationController
   # GET /my_items.json
   def index
     @my_items = current_api_v1_user.items
-    render json: { status: 'SUCCESS', message: 'Loaded posts', data: @my_items }
+    render json: { status: 'SUCCESS', message: 'Loaded my_items', data: @my_items }
   end
 
   # GET /my_items/1
   # GET /my_items/1.json
   def show
-    render json: { status: 'SUCCESS', message: 'Loaded the post', data: @my_item }
+    render json: { status: 'SUCCESS', message: 'Loaded the my_item', data: @my_item }
   end
 
   # POST /my_items
@@ -36,7 +36,7 @@ class Api::V1::MyItemsController < ApplicationController
   # PATCH/PUT /my_items/1.json
   def update
     if @my_item.update(my_item_params)
-      render json: { status: 'SUCCESS', message: 'Updated the post', data: @my_item }
+      render json: { status: 'SUCCESS', message: 'Updated the my_item', data: @my_item }
     else
       render json: { status: 'ERROR', message: 'Not updated', data: @my_item.errors }
     end
@@ -46,7 +46,7 @@ class Api::V1::MyItemsController < ApplicationController
   # DELETE /my_items/1.json
   def destroy
     @my_item.destroy
-    render json: { status: 'SUCCESS', message: 'Deleted the post', data: @my_item }
+    render json: { status: 'SUCCESS', message: 'Deleted the my_item', data: @my_item }
   end
 
   private
