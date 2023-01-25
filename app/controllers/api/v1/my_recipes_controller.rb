@@ -1,27 +1,24 @@
-class MyRecipesController < ApplicationController
+class Api::V1::MyRecipesController < ApplicationController
   protect_from_forgery
 
   before_action :authenticate_api_v1_user!
   before_action ->{
-    set_my_item
+    set_my_recipe
     check_data_owner(@my_recipe)
   }, only: %i[ show update destroy ]
 
-  # GET /my_recipes
-  # GET /my_recipes.json
+  # GET /api/v1/my_recipes.json
   def index
     @my_recipes = current_api_v1_user.recipes
     render json: { status: 'SUCCESS', message: 'Loaded recipes', data: @my_recipes }
   end
 
-  # GET /my_recipes/1
-  # GET /my_recipes/1.json
+  # GET /api/v1/my_recipes/1.json
   def show
     render json: { status: 'SUCCESS', message: 'Loaded recipes', data: @my_recipe }
   end
 
-  # POST /my_recipes
-  # POST /my_recipes.json
+  # POST /api/v1/my_recipes.json
   def create
     @my_recipe = current_api_v1_user.recipes.build(my_recipe_params)
 
@@ -32,21 +29,19 @@ class MyRecipesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /my_recipes/1
-  # PATCH/PUT /my_recipes/1.json
+  # PATCH/PUT /api/v1/my_recipes/1.json
   def update
     if @my_recipe.update(my_recipe_params)
-      render json: { status: 'SUCCESS', message: 'Updated the my_item', data: @my_recipe }
+      render json: { status: 'SUCCESS', message: 'Updated the my_recipe', data: @my_recipe }
     else
       render json: { status: 'ERROR', message: 'Not updated', data: @my_recipe.errors }
     end
   end
 
-  # DELETE /my_recipes/1
-  # DELETE /my_recipes/1.json
+  # DELETE /api/v1/my_recipes/1.json
   def destroy
     @my_recipe.destroy
-    render json: { status: 'SUCCESS', message: 'Deleted the my_item', data: @my_recipe }
+    render json: { status: 'SUCCESS', message: 'Deleted the my_recipe', data: @my_recipe }
   end
 
   private

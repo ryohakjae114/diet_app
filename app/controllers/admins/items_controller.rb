@@ -66,11 +66,6 @@ class Admins::ItemsController < ApplicationController
 
   private
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_item
-      @item = Item.find(params[:id])
-    end
-
     # Only allow a list of trusted parameters through.
     def item_params
       params.require(:item).permit(:name, :kcal, :protein, :fat, :carb, :df, :around_qty, :unit, :weight)

@@ -26,10 +26,7 @@ class Admins::RecipeItemsController < ApplicationController
 
     respond_to do |format|
       if @recipe_item.save
-
-        #レシピの各栄養素の値を更新
         @recipe.add_nutrients(@recipe_item)
-
         format.html { redirect_to admins_recipe_url(@recipe), notice: "アイテムが追加されました" }
         format.json { render :show, status: :created, location: admins_recipe_url(@recipe) }
       else

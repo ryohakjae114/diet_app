@@ -7,21 +7,18 @@ class Api::V1::MyItemsController < ApplicationController
     check_data_owner(@my_item)
   }, only: %i[ show update destroy ]
 
-  # GET /my_items
-  # GET /my_items.json
+  # GET /api/v1/my_items.json
   def index
     @my_items = current_api_v1_user.items
     render json: { status: 'SUCCESS', message: 'Loaded my_items', data: @my_items }
   end
 
-  # GET /my_items/1
-  # GET /my_items/1.json
+  # GET /api/v1/my_items/1.json
   def show
     render json: { status: 'SUCCESS', message: 'Loaded the my_item', data: @my_item }
   end
 
-  # POST /my_items
-  # POST /my_items.json
+  # POST /api/v1/my_items.json
   def create
     @my_item = current_api_v1_user.items.build(my_item_params)
 
@@ -32,8 +29,7 @@ class Api::V1::MyItemsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /my_items/1
-  # PATCH/PUT /my_items/1.json
+  # PATCH/PUT /api/v1/my_items/1.json
   def update
     if @my_item.update(my_item_params)
       render json: { status: 'SUCCESS', message: 'Updated the my_item', data: @my_item }
@@ -42,8 +38,7 @@ class Api::V1::MyItemsController < ApplicationController
     end
   end
 
-  # DELETE /my_items/1
-  # DELETE /my_items/1.json
+  # DELETE /api/v1/my_items/1.json
   def destroy
     @my_item.destroy
     render json: { status: 'SUCCESS', message: 'Deleted the my_item', data: @my_item }

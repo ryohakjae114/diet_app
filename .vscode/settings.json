@@ -1,6 +1,9 @@
 {
   "editor.formatOnSave": true,
   "cSpell.words": [
-    "carb"
+    "carb",
+    "omniauthable",
+    "timeoutable",
+    "validatable"
   ]
 }
