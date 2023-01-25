@@ -28,8 +28,10 @@ Rails.application.routes.draw do
   #api
   namespace :api do
     namespace :v1 do
-      resources :my_items  , only: [:index, :create, :show, :update, :destroy]
-      resources :my_recipes, only: [:index, :create, :show, :update, :destroy]
+      resources :my_items,   only: [:index, :create, :show, :update, :destroy]
+      resources :my_recipes, only: [:index, :create, :show, :update, :destroy] do
+        resources :my_recipe_items, only: [:index, :create, :show, :destroy]
+      end
       mount_devise_token_auth_for "User", at: "auth", controllers: {
                                             sessions:      "api/v1/auth/sessions",
                                             registrations: "api/v1/auth/registrations",

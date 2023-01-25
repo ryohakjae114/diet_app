@@ -2,8 +2,8 @@ class Api::V1::MyRecipeItemsController < ApplicationController
   protect_from_forgery
 
   before_action :authenticate_api_v1_user!
-  before_action :set_my_recipe,      only: %i[ index create ]
-  before_action :set_my_recipe_item, only: %i[ destroy ]
+  before_action :set_my_recipe
+  before_action :set_my_recipe_item, only: %i[ show destroy ]
   before_action ->{
     check_data_owner(@my_recipe)
   }
@@ -14,9 +14,10 @@ class Api::V1::MyRecipeItemsController < ApplicationController
     render json: { status: 'SUCCESS', message: 'Loaded my_recipe_item', data: @my_recipe_items }
   end
 
-  # GET /my_recipe_items/1.json
-  # def show
-  # end
+  # GET /api/v1/recipes/1/my_recipe_items/1.json
+  def show
+    render json: { status: 'SUCCESS', message: 'Loaded my_recipe_item', data: @my_recipe_item }
+  end
 
   # POST /api/v1/recipes/1/my_recipe_items.json
   def create
@@ -30,7 +31,8 @@ class Api::V1::MyRecipeItemsController < ApplicationController
     end
 
     if @my_recipe_item.save
-      render json: { status: 'SUCCESS', message: 'Loaded my_recipe_item', data: @my_recipe_item }
+      @recipe.add_nutrients(@recipe_item)
+      render json: { status: 'SUCCESS', data: @my_recipe_item }
     else
       render json: { status: 'ERROR', data: @my_recipe_item.errors }
     end
@@ -45,8 +47,9 @@ class Api::V1::MyRecipeItemsController < ApplicationController
   #   end
   # end
 
-  # DELETE /api/v1/my_recipe_items/1.json
+  # DELETE /api/v1/my_recipes/1/my_recipe_items/1.json
   def destroy
+    @my_recipe.sub_nutrients(@my_recipe_item)
     @my_recipe_item.destroy
     render json: { status: 'SUCCESS', message: 'Deleted the my_recipe_item', data: @my_recipe_item }
   end
@@ -54,7 +57,7 @@ class Api::V1::MyRecipeItemsController < ApplicationController
   private
 
     def set_my_recipe
-      @my_recipe = Recipe.find(params[:id])
+      @my_recipe = Recipe.find(params[:my_recipe_id])
     end
 
     # Use callbacks to share common setup or constraints between actions.
