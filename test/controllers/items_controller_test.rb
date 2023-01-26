@@ -6,43 +6,33 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get index" do
-    get items_url
-    assert_response :success
-  end
-
-  test "should get new" do
-    get new_item_url
+    get items_url, as: :json
     assert_response :success
   end
 
   test "should create item" do
     assert_difference('Item.count') do
-      post items_url, params: { item: { around_qty: @item.around_qty, carb: @item.carb, df: @item.df, fat: @item.fat, kcal: @item.kcal, name: @item.name, protein: @item.protein } }
+      post items_url, params: { item: {  } }, as: :json
     end
 
-    assert_redirected_to item_url(Item.last)
+    assert_response 201
   end
 
   test "should show item" do
-    get item_url(@item)
-    assert_response :success
-  end
-
-  test "should get edit" do
-    get edit_item_url(@item)
+    get item_url(@item), as: :json
     assert_response :success
   end
 
   test "should update item" do
-    patch item_url(@item), params: { item: { around_qty: @item.around_qty, carb: @item.carb, df: @item.df, fat: @item.fat, kcal: @item.kcal, name: @item.name, protein: @item.protein } }
-    assert_redirected_to item_url(@item)
+    patch item_url(@item), params: { item: {  } }, as: :json
+    assert_response 200
   end
 
   test "should destroy item" do
     assert_difference('Item.count', -1) do
-      delete item_url(@item)
+      delete item_url(@item), as: :json
     end
 
-    assert_redirected_to items_url
+    assert_response 204
   end
 end

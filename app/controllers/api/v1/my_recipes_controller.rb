@@ -4,7 +4,7 @@ class Api::V1::MyRecipesController < ApplicationController
   before_action :authenticate_api_v1_user!
   before_action ->{
     set_my_recipe
-    check_data_owner(@my_recipe)
+    data_owner(@my_recipe)
   }, only: %i[ show update destroy ]
 
   # GET /api/v1/my_recipes.json

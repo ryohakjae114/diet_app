@@ -5,7 +5,7 @@ class Api::V1::MyRecipeItemsController < ApplicationController
   before_action :set_my_recipe
   before_action :set_my_recipe_item, only: %i[ show destroy ]
   before_action ->{
-    check_data_owner(@my_recipe)
+    data_owner(@my_recipe)
   }
 
   # GET /api/v1/recipes/1/my_recipe_items.json

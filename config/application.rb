@@ -17,6 +17,6 @@ module DietApp
     #　アプリケーションを日本時間に
     config.time_zone = 'Tokyo'
     #scaffoldをapiとして作成したい時に一時的に。
-    #config.api_only = true
+    config.api_only = true
   end
 end

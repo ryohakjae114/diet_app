@@ -4,10 +4,7 @@ class ApplicationController < ActionController::Base
 
   private
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_recipe
-      @recipe = Recipe.find(params[:id])
-    end
+    #管理者
 
     def authenticate_admin!
       unless admin_signed_in?
@@ -25,9 +22,21 @@ class ApplicationController < ActionController::Base
       !!(warden.user)
     end
 
-    def check_data_owner(data)
+    def set_recipe
+      @recipe = Recipe.find(params[:id])
+    end
+
+    #api
+
+    def data_owner(data)
       unless current_api_v1_user == data.user
         render json: { status: "ERROR", message: "Not current_user's data"}
+      end
+    end
+
+    def share_data(data)
+      unless data.user_id == nil
+        render json: { status: "ERROR", message: "Not share data"}
       end
     end
 end
