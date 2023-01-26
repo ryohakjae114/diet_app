@@ -4,7 +4,7 @@ class Api::V1::MyItemsController < ApplicationController
   before_action :authenticate_api_v1_user!
   before_action ->{
     set_my_item
-    check_data_owner(@my_item)
+    data_owner(@my_item)
   }, only: %i[ show update destroy ]
 
   # GET /api/v1/my_items.json
