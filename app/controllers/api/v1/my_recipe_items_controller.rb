@@ -8,18 +8,18 @@ class Api::V1::MyRecipeItemsController < ApplicationController
     data_owner(@my_recipe)
   }
 
-  # GET /api/v1/recipes/1/my_recipe_items.json
+  # GET /api/v1/my_recipes/1/my_recipe_items.json
   def index
     @my_recipe_items = @my_recipe.recipe_items
     render json: { status: 'SUCCESS', message: 'Loaded my_recipe_item', data: @my_recipe_items }
   end
 
-  # GET /api/v1/recipes/1/my_recipe_items/1.json
+  # GET /api/v1/my_recipes/1/my_recipe_items/1.json
   def show
     render json: { status: 'SUCCESS', message: 'Loaded my_recipe_item', data: @my_recipe_item }
   end
 
-  # POST /api/v1/recipes/1/my_recipe_items.json
+  # POST /api/v1/my_recipes/1/my_recipe_items.json
   def create
     @my_recipe_item = @my_recipe.recipe_items.build(my_recipe_params)
     item = @my_recipe_item.item
@@ -62,7 +62,7 @@ class Api::V1::MyRecipeItemsController < ApplicationController
 
     # Use callbacks to share common setup or constraints between actions.
     def set_my_recipe_item
-      @my_recipe_item = RecipeItem.find(params[:id])
+      @my_recipe_item = RecipeItem.find_by(recipe_id: @my_recipe.id, item_id: params[:my_item_id])
     end
 
     # Only allow a list of trusted parameters through.
