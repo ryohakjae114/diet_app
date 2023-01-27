@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   has_many :posts
   has_many :items
   has_many :recipes
+  has_many :my_sets
 
   validates :activated, inclusion: { in: [true, false] }
 
