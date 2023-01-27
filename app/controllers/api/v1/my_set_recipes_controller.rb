@@ -2,13 +2,23 @@ class Api::V1::MySetRecipesController < ApplicationController
   protect_from_forgery
 
   before_action :authenticate_api_v1_user!
-  before_action :set_my_set,        only: %i[ index create ]
-  before_action :set_my_set_recipe, only: %i[ show update destroy ]
+  before_action ->{
+    set_my_set
+  }, only: %i[ index create ]
+
+  before_action -> {
+    set_my_set_recipe
+    set_my_set_from_my_set_recipe
+  }, only: %i[ show update destroy ]
+
+  before_action -> {
+    data_owner(@recipe)
+  }
 
   # GET /api/v1/my_set_recipes
   # GET /api/v1/my_set_recipes.json
   def index
-    @my_set_recipes = @my_set_recipe.my_set_recipes
+    @my_set_recipes = @my_set.my_set_recipes
     render json: { status: 'SUCCESS', message: 'Loaded recipes', data: @my_set_recipes }
   end
 
@@ -57,6 +67,10 @@ class Api::V1::MySetRecipesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_my_set_recipe
       @my_set_recipe = MySetRecipe.find(params[:id])
+    end
+
+    def set_my_set_from_my_set_recipe
+      @my_set = @my_set_recipe.my_set
     end
 
     # Only allow a list of trusted parameters through.

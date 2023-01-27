@@ -2,9 +2,16 @@ class Api::V1::RecipeItemsController < ApplicationController
   protect_from_forgery
 
   before_action :authenticate_api_v1_user!
-  before_action :set_recipe
-  before_action :set_recipe_item, only: %i[ show destroy ]
   before_action ->{
+    set_recipe
+  }, only: %i[ index create ]
+
+  before_action ->{
+    set_recipe_item
+    set_recipe_from_recipe_item(@recipe_item)
+  }, only: %i[ show destroy ]
+  
+  before_action -> {
     share_data(@recipe)
   }
 
@@ -56,17 +63,22 @@ class Api::V1::RecipeItemsController < ApplicationController
 
   private
 
-    def set__recipe
-      @recipe = Recipe.find(params[:recipe_id])
+    def set_recipe
+      @recipe = Recipe.find(params[:id])
     end
 
     # Use callbacks to share common setup or constraints between actions.
-    def set__recipe_item
-      @recipe_item = RecipeItem.find_by(recipe_id: @recipe.id, item_id: params[:item_id])
+    def set_recipe_item
+      @recipe_item = RecipeItem.find(params[:id])
+    end
+
+    def set_recipe_from_recipe_item
+      @recipe = @recipe_item.recipe
     end
 
     # Only allow a list of trusted parameters through.
-    def _recipe_item_params
+    def recipe_item_params
       params.fetch(:recipe_item, {}).permit(:item_id, :kcal, :weight)
     end
+
 end
