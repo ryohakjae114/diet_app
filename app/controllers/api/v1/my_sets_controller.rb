@@ -4,7 +4,7 @@ class Api::V1::MySetsController < ApplicationController
   before_action :authenticate_api_v1_user!
   before_action ->{
     set_my_set
-    data_owner(@my_recipe)
+    data_owner(@my_set)
   }, only: %i[ show update destroy ]
 
   # GET /api/v1/my_sets
@@ -23,7 +23,7 @@ class Api::V1::MySetsController < ApplicationController
   # POST /api/v1/my_sets
   # POST /api/v1/my_sets.json
   def create
-    @my_set = current_api_v1_user.new(my_set_params)
+    @my_set = current_api_v1_user.my_sets.build(my_set_params)
 
     if @my_set.save
       render json: { status: 'SUCCESS', data: @my_set }

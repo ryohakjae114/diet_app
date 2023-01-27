@@ -30,21 +30,23 @@ Rails.application.routes.draw do
     namespace :v1 do
 
       resources :my_items,   only: [:index, :create, :show, :update, :destroy]
-      resources :my_recipes, only: [:index, :create, :show, :update, :destroy] do
-        resources :my_recipe_items, only: [:index, :create]
-        get    'my_items/:my_item_id', to: 'api/v1/my_items#show'
-        delete 'my_items/:my_item_id', to: 'api/v1/my_items#destroy'
+      resources :my_recipes, only: [:index, :create, :show, :update, :destroy], shallow: true do
+        member do
+          resources :my_recipe_items, only: [:index, :create, :show, :destroy]
+        end
       end
+
       resources :my_sets, shallow: true do
         member do
           resources :my_set_recipes
         end
       end
+      
       resources :items,   only: [:index, :show]
-      resources :recipes, only: [:index, :show] do
-        resources :recipe_items, only: [:index, :create]
-        get    'items/:item_id',    to: 'api/v1/items#show'
-        delete 'my_items/:item_id', to: 'api/v1/items#destroy'
+      resources :recipes, only: [:index, :show], shallow: true do
+        member do
+          resources :recipe_items, only: [:index, :create, :show, :destroy]
+        end
       end
 
       mount_devise_token_auth_for "User", at: "auth", controllers: {
