@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_25_024938) do
+ActiveRecord::Schema.define(version: 2023_01_27_025950) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -52,6 +52,22 @@ ActiveRecord::Schema.define(version: 2023_01_25_024938) do
     t.uuid "user_id"
     t.index ["name"], name: "index_items_on_name", unique: true
     t.index ["user_id"], name: "index_items_on_user_id"
+  end
+
+  create_table "my_set_recipes", force: :cascade do |t|
+    t.bigint "recipe_id_id"
+    t.integer "count"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["recipe_id_id"], name: "index_my_set_recipes_on_recipe_id_id"
+  end
+
+  create_table "my_sets", force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_my_sets_on_user_id"
   end
 
   create_table "posts", force: :cascade do |t|
@@ -115,6 +131,7 @@ ActiveRecord::Schema.define(version: 2023_01_25_024938) do
 
   add_foreign_key "diaries", "users"
   add_foreign_key "items", "users"
+  add_foreign_key "my_sets", "users"
   add_foreign_key "posts", "users"
   add_foreign_key "recipes", "users"
 end

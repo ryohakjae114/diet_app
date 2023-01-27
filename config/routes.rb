@@ -35,7 +35,11 @@ Rails.application.routes.draw do
         get    'my_items/:my_item_id', to: 'api/v1/my_items#show'
         delete 'my_items/:my_item_id', to: 'api/v1/my_items#destroy'
       end
-
+      resources :my_sets, shallow: true do
+        member do
+          resources :my_set_recipes
+        end
+      end
       resources :items,   only: [:index, :show]
       resources :recipes, only: [:index, :show] do
         resources :recipe_items, only: [:index, :create]
