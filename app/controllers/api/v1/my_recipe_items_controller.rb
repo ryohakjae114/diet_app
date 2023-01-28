@@ -8,7 +8,7 @@ class Api::V1::MyRecipeItemsController < ApplicationController
 
   before_action ->{
     set_my_recipe_item
-    set_recipe_from_recipe_item(@my_recipe_item)
+    set_recipe_from_recipe_item
   }, only: %i[ show destroy ]
   
   before_action -> {
@@ -72,8 +72,8 @@ class Api::V1::MyRecipeItemsController < ApplicationController
       @my_recipe_item = RecipeItem.find(params[:id])
     end
 
-    def set_recipe_from_recipe_item(recipe_item)
-      @my_recipe = recipe_item.recipe
+    def set_recipe_from_recipe_item
+      @my_recipe = @my_recipe_item.recipe
     end
 
     # Only allow a list of trusted parameters through.
