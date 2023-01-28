@@ -26,6 +26,10 @@ class ApplicationController < ActionController::Base
       @recipe = Recipe.find(params[:id])
     end
 
+    def set_meal
+      @meal = Meal.find(params[:id])
+    end
+
     #api
 
     def data_owner(data)

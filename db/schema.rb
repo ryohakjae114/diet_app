@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_28_080439) do
+ActiveRecord::Schema.define(version: 2023_01_28_113513) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -52,6 +52,16 @@ ActiveRecord::Schema.define(version: 2023_01_28_080439) do
     t.uuid "user_id"
     t.index ["name"], name: "index_items_on_name", unique: true
     t.index ["user_id"], name: "index_items_on_user_id"
+  end
+
+  create_table "meal_menus", force: :cascade do |t|
+    t.bigint "meal_id", null: false
+    t.bigint "recipe_id", null: false
+    t.integer "count"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["meal_id"], name: "index_meal_menus_on_meal_id"
+    t.index ["recipe_id"], name: "index_meal_menus_on_recipe_id"
   end
 
   create_table "meals", force: :cascade do |t|
@@ -149,6 +159,8 @@ ActiveRecord::Schema.define(version: 2023_01_28_080439) do
 
   add_foreign_key "diaries", "users"
   add_foreign_key "items", "users"
+  add_foreign_key "meal_menus", "meals"
+  add_foreign_key "meal_menus", "recipes"
   add_foreign_key "meals", "users"
   add_foreign_key "my_sets", "users"
   add_foreign_key "posts", "users"

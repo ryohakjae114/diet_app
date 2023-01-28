@@ -30,7 +30,11 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
 
-      resources :meals, only: [:create, :show, :destroy]
+      resources :meals, only: [:create, :show, :destroy], shallow: true do
+        member do
+          resources :meal_menus, only: [:index, :create, :update, :show, :destroy]
+        end
+      end
       
       resources :weight_records,   only: [:create, :show, :destroy]
 

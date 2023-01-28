@@ -8,7 +8,7 @@ class Api::V1::RecipeItemsController < ApplicationController
 
   before_action ->{
     set_recipe_item
-    set_recipe_from_recipe_item(@recipe_item)
+    set_recipe_from_recipe_item
   }, only: %i[ show destroy ]
   
   before_action -> {
