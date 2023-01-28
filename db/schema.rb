@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_27_025950) do
+ActiveRecord::Schema.define(version: 2023_01_28_014044) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -129,9 +129,18 @@ ActiveRecord::Schema.define(version: 2023_01_27_025950) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  create_table "weight_records", force: :cascade do |t|
+    t.uuid "user_id"
+    t.decimal "weight"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_weight_records_on_user_id"
+  end
+
   add_foreign_key "diaries", "users"
   add_foreign_key "items", "users"
   add_foreign_key "my_sets", "users"
   add_foreign_key "posts", "users"
   add_foreign_key "recipes", "users"
+  add_foreign_key "weight_records", "users"
 end
