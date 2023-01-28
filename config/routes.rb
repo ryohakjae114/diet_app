@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :weight_records
+
   root "admins#top"
 
   #admin
@@ -30,6 +30,8 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
 
+      resources :meals, only: [:create, :show, :destroy]
+      
       resources :weight_records,   only: [:create, :show, :destroy]
 
       resources :my_items,   only: [:index, :create, :show, :update, :destroy]
