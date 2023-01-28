@@ -11,6 +11,7 @@ class Api::V1::ItemsController < ApplicationController
   # GET /api/v1/items.json
   def index
     @items = Item.where(user_id: nil)
+    render json: { status: 'SUCCESS', message: 'Loaded items', data: @items }
   end
 
   # GET /api/v1/items/1

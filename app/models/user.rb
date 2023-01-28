@@ -9,7 +9,8 @@ class User < ActiveRecord::Base
 
   enum gender: { male: 0, female: 1 }
 
-  has_one  :diary, dependent: :destroy
+  has_many :weight_records, dependent: :destroy
+  has_one  :diary         , dependent: :destroy
   has_many :posts
   has_many :items
   has_many :recipes
