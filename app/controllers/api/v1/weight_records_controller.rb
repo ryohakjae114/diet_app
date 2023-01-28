@@ -1,6 +1,7 @@
 class Api::V1::WeightRecordsController < ApplicationController
   protect_from_forgery
 
+  before_action :authenticate_api_v1_user!
   before_action ->{
     set_weight_record
     data_owner(@weight_record)
@@ -44,7 +45,7 @@ class Api::V1::WeightRecordsController < ApplicationController
   # DELETE /weight_records/1.json
   def destroy
     @weight_record.destroy
-    render json: { status: 'SUCCESS', message: 'Deleted the my_item', data: @weight_record }
+    render json: { status: 'SUCCESS', message: 'Deleted the weight_record', data: @weight_record }
   end
 
   private
