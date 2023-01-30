@@ -2,10 +2,11 @@ class Api::V1::DiariesController < ApplicationController
   protect_from_forgery
 
   before_action :authenticate_api_v1_user!
+  before_action :set_diary, only: %i[ show update destroy ]
+  before_action :can_use_diary
   before_action ->{
-    set_diary
     data_owner(@diary)
-  }, only: %i[ show update destroy ]
+  }, only: %i[ update destroy ]
 
   # GET /diaries
   # GET /diaries.json
@@ -17,7 +18,11 @@ class Api::V1::DiariesController < ApplicationController
   # GET /diaries/1
   # GET /diaries/1.json
   def show
-    render json: { status: 'SUCCESS', message: 'Loaded the diary', data: @diary }
+    if @diary.user == current_api_v1_user || @diary.activated?
+      render json: { status: 'SUCCESS', message: 'Loaded the diary', data: @diary }
+    else
+      render json: { status: 'ERROR', message: 'Not public diary', data: @diary }
+    end
   end
 
   # POST /diaries
@@ -57,6 +62,6 @@ class Api::V1::DiariesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def diary_params
-      params.require(:diary).permit(:introduction, :icon, :public_diary, :public_body)
+      params.require(:diary, {}).permit(:introduction, :icon, :public_diary, :public_body)
     end
 end

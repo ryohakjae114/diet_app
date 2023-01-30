@@ -43,4 +43,10 @@ class ApplicationController < ActionController::Base
         render json: { status: "ERROR", message: "Not share data"}
       end
     end
+
+    def can_use_diary
+      unless current_api_v1_user.diary.activated?
+        render json: { status: "ERROR", message: "Not use diary"}
+      end
+    end
 end

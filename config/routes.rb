@@ -29,7 +29,7 @@ Rails.application.routes.draw do
   #api
   namespace :api do
     namespace :v1 do
-
+      
       resources :meals, only: [:create, :show, :destroy], shallow: true do
         member do
           resources :meal_menus, only: [:index, :create, :update, :show, :destroy]
@@ -39,6 +39,7 @@ Rails.application.routes.draw do
       resources :weight_records,   only: [:create, :show, :destroy]
 
       resources :diaries, only: [:index, :create, :show, :update, :destroy]
+      resources :posts, only: [:index, :create, :show, :update, :destroy]
 
       resources :my_items,   only: [:index, :create, :show, :update, :destroy]
       resources :my_recipes, only: [:index, :create, :show, :update, :destroy], shallow: true do
@@ -64,7 +65,8 @@ Rails.application.routes.draw do
                                             sessions:      "api/v1/auth/sessions",
                                             registrations: "api/v1/auth/registrations",
                                             passwords:     "api/v1/auth/passwords"
-                                          }
+      }
+
     end
   end
 end
