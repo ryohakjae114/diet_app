@@ -25,12 +25,12 @@ ActiveRecord::Schema.define(version: 2023_01_28_113513) do
     t.index ["name"], name: "index_admins_on_name", unique: true
   end
 
-  create_table "diaries", force: :cascade do |t|
+  create_table "diaries", force: :cascade do |t|   #日記プロフフィール
     t.uuid "user_id", null: false
     t.string "introduction"
     t.string "icon"
-    t.boolean "public_diary"
-    t.boolean "public_body"
+    t.boolean "public_diary"  #日記を公開するかしないか
+    t.boolean "public_body"   #身体情報を公開するかしないか
     t.boolean "activated", default: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
