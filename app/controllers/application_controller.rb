@@ -45,8 +45,14 @@ class ApplicationController < ActionController::Base
     end
 
     def can_use_diary
-      unless current_api_v1_user.diary.activated?
-        render json: { status: "ERROR", message: "Not use diary"}
+      if current_api_v1_user.is_suspended_diary?
+        render json: { status: "ERROR", message: "Can't use diary"}
+      end
+    end
+
+    def have_own_diary
+      unless current_api_v1_user.diary.present?
+        render json: { status: "ERROR", message: "Not have diary"}
       end
     end
 end
