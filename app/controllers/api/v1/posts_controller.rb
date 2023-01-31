@@ -34,7 +34,7 @@ class Api::V1::PostsController < ApplicationController
     if @post.save
       render json: { status: 'SUCCESS', data: @post }
     else
-      render json: { status: 'ERROR', data: @post.errors }
+      render json: { status: 'ERROR', @post_comment.errors }
     end
   end
 
