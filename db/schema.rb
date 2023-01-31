@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_28_113513) do
+ActiveRecord::Schema.define(version: 2023_01_30_050331) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -25,12 +25,12 @@ ActiveRecord::Schema.define(version: 2023_01_28_113513) do
     t.index ["name"], name: "index_admins_on_name", unique: true
   end
 
-  create_table "diaries", force: :cascade do |t|   #日記プロフフィール
+  create_table "diaries", force: :cascade do |t|
     t.uuid "user_id", null: false
     t.string "introduction"
     t.string "icon"
-    t.boolean "public_diary"  #日記を公開するかしないか
-    t.boolean "public_body"   #身体情報を公開するかしないか
+    t.boolean "public_diary"
+    t.boolean "public_body"
     t.boolean "activated", default: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -88,6 +88,16 @@ ActiveRecord::Schema.define(version: 2023_01_28_113513) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_my_sets_on_user_id"
+  end
+
+  create_table "post_comments", force: :cascade do |t|
+    t.bigint "post_id", null: false
+    t.uuid "user_id", null: false
+    t.string "text"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["post_id"], name: "index_post_comments_on_post_id"
+    t.index ["user_id"], name: "index_post_comments_on_user_id"
   end
 
   create_table "posts", force: :cascade do |t|
@@ -163,6 +173,8 @@ ActiveRecord::Schema.define(version: 2023_01_28_113513) do
   add_foreign_key "meal_menus", "recipes"
   add_foreign_key "meals", "users"
   add_foreign_key "my_sets", "users"
+  add_foreign_key "post_comments", "posts"
+  add_foreign_key "post_comments", "users"
   add_foreign_key "posts", "users"
   add_foreign_key "recipes", "users"
   add_foreign_key "weight_records", "users"

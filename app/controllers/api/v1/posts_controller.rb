@@ -2,8 +2,9 @@ class Api::V1::PostsController < ApplicationController
   protect_from_forgery
 
   before_action :authenticate_api_v1_user!
-  before_action :set_post, only: %i[ show update destroy ]
   before_action :can_use_diary
+  before_action :have_own_diary, only: %i[ create update destroy ]
+  before_action :set_post, only: %i[ show update destroy ]
   before_action ->{
     data_owner(@post)
   }, only: %i[ update destroy ]
@@ -11,14 +12,14 @@ class Api::V1::PostsController < ApplicationController
   # GET /posts
   # GET /posts.json
   def index
-    @posts = Post.all
+    @posts = Post.all_public_posts
     render json: { status: 'SUCCESS', message: 'Loaded the posts', data: @posts }
   end
 
   # GET /posts/1
   # GET /posts/1.json
   def show
-    if @post.user == current_api_v1_user || @post.user.diary.activated?
+    if @post.user == current_api_v1_user || @post.public?
       render json: { status: 'SUCCESS', message: 'Loaded the post', data: @post }
     else
       render json: { status: 'ERROR', message: 'Not public diary', data: @post }
@@ -41,9 +42,9 @@ class Api::V1::PostsController < ApplicationController
   # PATCH/PUT /posts/1.json
   def update
     if @post.update(post_params)
-      render json: { status: 'SUCCESS', message: 'Updated the my_item', data: @post }
+      render json: { status: 'SUCCESS', message: 'Updated the post', data: @post }
     else
-      render json: { status: 'ERROR', message: 'Not updated', data: @post.errors }
+      render json: { status: 'ERROR', message: 'Not updated the post', data: @post.errors }
     end
   end
 
@@ -51,7 +52,7 @@ class Api::V1::PostsController < ApplicationController
   # DELETE /posts/1.json
   def destroy
     @post.destroy
-    render json: { status: 'SUCCESS', message: 'Deleted the diary', data: @diary }
+    render json: { status: 'SUCCESS', message: 'Deleted the post', data: @post }
   end
 
   private
@@ -62,6 +63,6 @@ class Api::V1::PostsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def post_params
-      params.fetch(:post, {}).permit(:introduction, :icon, :public_diary, :public_body)
+      params.fetch(:post, {}).permit(:text)
     end
 end

@@ -2,8 +2,8 @@ class Api::V1::DiariesController < ApplicationController
   protect_from_forgery
 
   before_action :authenticate_api_v1_user!
-  before_action :set_diary, only: %i[ show update destroy ]
   before_action :can_use_diary
+  before_action :set_diary, only: %i[ show update destroy ]
   before_action ->{
     data_owner(@diary)
   }, only: %i[ update destroy ]
@@ -18,7 +18,7 @@ class Api::V1::DiariesController < ApplicationController
   # GET /diaries/1
   # GET /diaries/1.json
   def show
-    if @diary.user == current_api_v1_user || @diary.activated?
+    if @diary.user == current_api_v1_user || @diary.public_diary?
       render json: { status: 'SUCCESS', message: 'Loaded the diary', data: @diary }
     else
       render json: { status: 'ERROR', message: 'Not public diary', data: @diary }
@@ -41,9 +41,9 @@ class Api::V1::DiariesController < ApplicationController
   # PATCH/PUT /diaries/1.json
   def update
     if @diary.update(diary_params)
-      render json: { status: 'SUCCESS', message: 'Updated the my_item', data: @diary }
+      render json: { status: 'SUCCESS', message: 'Updated the diary', data: @diary }
     else
-      render json: { status: 'ERROR', message: 'Not updated', data: @diary.errors }
+      render json: { status: 'ERROR', message: 'Not updated the diary', data: @diary.errors }
     end
   end
 

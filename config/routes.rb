@@ -39,7 +39,11 @@ Rails.application.routes.draw do
       resources :weight_records,   only: [:create, :show, :destroy]
 
       resources :diaries, only: [:index, :create, :show, :update, :destroy]
-      resources :posts, only: [:index, :create, :show, :update, :destroy]
+      resources :posts, only: [:index, :create, :show, :update, :destroy], shallow: true do
+        member do
+          resources :post_comments, only: [:index, :create, :show, :update, :destroy]
+        end
+      end
 
       resources :my_items,   only: [:index, :create, :show, :update, :destroy]
       resources :my_recipes, only: [:index, :create, :show, :update, :destroy], shallow: true do
