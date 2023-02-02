@@ -1,7 +1,5 @@
 class Api::V1::MealMenusController < ApplicationController
-  protect_from_forgery
 
-  before_action :authenticate_api_v1_user!
   before_action ->{
     set_meal
   }, only: %i[ index create ]
@@ -15,8 +13,8 @@ class Api::V1::MealMenusController < ApplicationController
     data_owner(@meal)
   }
 
-  # GET /meal_menus
-  # GET /meal_menus.json
+  # GET /api/v1/meals/1/meal_menus
+  # GET /api/v1/meals/1/meal_menus.json
   def index
     @meal_menus = @meal.meal_menus
     render json: { status: 'SUCCESS', message: 'Loaded meal_menu', data: @meal_menus }
@@ -28,8 +26,8 @@ class Api::V1::MealMenusController < ApplicationController
     render json: { status: 'SUCCESS', message: 'Loaded my_recipe_item', data: @meal_menu }
   end
 
-  # POST /meal_menus
-  # POST /meal_menus.json
+  # POST /meal/1/meal_menus
+  # POST /meal/1/meal_menus.json
   def create
     @meal_menu = @meal.meal_menus.build(meal_menu_params)
 
@@ -69,6 +67,6 @@ class Api::V1::MealMenusController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def meal_menu_params
-      params.require(:meal_menu).permit(:meal_id, :recipe_id, :count)
+      params.fetch(:meal_menu, {}).permit(:recipe_id, :count)
     end
 end

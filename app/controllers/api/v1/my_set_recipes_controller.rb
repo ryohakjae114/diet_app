@@ -1,7 +1,5 @@
 class Api::V1::MySetRecipesController < ApplicationController
-  protect_from_forgery
 
-  before_action :authenticate_api_v1_user!
   before_action ->{
     set_my_set
   }, only: %i[ index create ]
@@ -12,11 +10,11 @@ class Api::V1::MySetRecipesController < ApplicationController
   }, only: %i[ show update destroy ]
 
   before_action -> {
-    data_owner(@recipe)
+    data_owner(@my_set)
   }
 
-  # GET /api/v1/my_set_recipes
-  # GET /api/v1/my_set_recipes.json
+  # GET /api/v1/my_sets/1/my_set_recipes
+  # GET /api/v1/my_sets/1/my_set_recipes.json
   def index
     @my_set_recipes = @my_set.my_set_recipes
     render json: { status: 'SUCCESS', message: 'Loaded recipes', data: @my_set_recipes }
@@ -28,10 +26,10 @@ class Api::V1::MySetRecipesController < ApplicationController
     render json: { status: 'SUCCESS', message: 'Loaded recipe', data: @my_set_recipe }
   end
 
-  # POST /api/v1/my_set_recipes
-  # POST /api/v1/my_set_recipes.json
+  # POST /api/v1/my_sets/1/my_set_recipes
+  # POST /api/v1/my_sets/1/my_set_recipes.json
   def create
-    @my_set_recipe = @my_set_recipe.build(my_set_recipe_params)
+    @my_set_recipe = @my_set.my_set_recipes.build(my_set_recipe_params)
 
     if @my_set_recipe.save
       render json: { status: 'SUCCESS', data: @my_set_recipe }
@@ -75,6 +73,6 @@ class Api::V1::MySetRecipesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def my_set_recipe_params
-      params.require(:my_set_recipe).permit(:recipe_id, :count)
+      params.fetch(:my_set_recipe, {}).permit(:recipe_id, :count)
     end
 end

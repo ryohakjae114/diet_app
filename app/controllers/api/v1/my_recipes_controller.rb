@@ -1,7 +1,5 @@
 class Api::V1::MyRecipesController < ApplicationController
-  protect_from_forgery
 
-  before_action :authenticate_api_v1_user!
   before_action ->{
     set_my_recipe
     data_owner(@my_recipe)

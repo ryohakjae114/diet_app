@@ -1,32 +1,30 @@
 class Api::V1::DiariesController < ApplicationController
-  protect_from_forgery
-
-  before_action :authenticate_api_v1_user!
+  
   before_action :can_use_diary
   before_action :set_diary, only: %i[ show update destroy ]
   before_action ->{
     data_owner(@diary)
   }, only: %i[ update destroy ]
 
-  # GET /diaries
-  # GET /diaries.json
+  # GET /api/v1/diaries
+  # GET /api/v1/diaries.json
   def index
     @diaries = Diary.all
     render json: { status: 'SUCCESS', message: 'Loaded the diaries', data: @diaries }
   end
 
-  # GET /diaries/1
-  # GET /diaries/1.json
+  # GET /api/v1/diaries/1
+  # GET /api/v1/diaries/1.json
   def show
     if @diary.user == current_api_v1_user || @diary.public_diary?
       render json: { status: 'SUCCESS', message: 'Loaded the diary', data: @diary }
     else
-      render json: { status: 'ERROR', message: 'Not public diary', data: @diary }
+      render json: { status: 'ERROR', message: 'Not public diary'}
     end
   end
 
-  # POST /diaries
-  # POST /diaries.json
+  # POST /api/v1/diaries
+  # POST /api/v1/diaries.json
   def create
     @diary = current_api_v1_user.build_diary(diary_params)
 
@@ -37,8 +35,8 @@ class Api::V1::DiariesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /diaries/1
-  # PATCH/PUT /diaries/1.json
+  # PATCH/PUT /api/v1/diaries/1
+  # PATCH/PUT /api/v1/diaries/1.json
   def update
     if @diary.update(diary_params)
       render json: { status: 'SUCCESS', message: 'Updated the diary', data: @diary }
@@ -47,8 +45,8 @@ class Api::V1::DiariesController < ApplicationController
     end
   end
 
-  # DELETE /diaries/1
-  # DELETE /diaries/1.json
+  # DELETE /api/v1/diaries/1
+  # DELETE /api/v1/diaries/1.json
   def destroy
     @diary.destroy
     render json: { status: 'SUCCESS', message: 'Deleted the diary', data: @diary }
@@ -62,6 +60,6 @@ class Api::V1::DiariesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def diary_params
-      params.require(:diary, {}).permit(:introduction, :icon, :public_diary, :public_body)
+      params.fetch(:diary, {}).permit(:introduction, :icon, :public_diary, :public_body)
     end
 end

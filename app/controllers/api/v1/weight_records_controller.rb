@@ -1,7 +1,5 @@
 class Api::V1::WeightRecordsController < ApplicationController
-  protect_from_forgery
 
-  before_action :authenticate_api_v1_user!
   before_action ->{
     set_weight_record
     data_owner(@weight_record)
@@ -9,9 +7,10 @@ class Api::V1::WeightRecordsController < ApplicationController
 
   # GET /weight_records
   # GET /weight_records.json
-  # def index
-  #   @weight_records = WeightRecord.all
-  # end
+  def index
+    @weight_records = current_api_v1_user.weight_records
+    render json: { status: 'SUCCESS', message: 'Loaded weight_records', data: @weight_records }
+  end
 
   # GET /weight_records/1
   # GET /weight_records/1.json
