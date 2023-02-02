@@ -2,6 +2,8 @@ class Post < ApplicationRecord
   belongs_to :user
   has_many :post_comments
 
+  validates :text, presence: true, length: { maximum: 500 }
+
   def self.all_public_posts
     public_diary_ids      = Diary.where(public_diary: true).pluck(:user_id)
     public_diary_user_ids = User.where(id: public_diary_ids).pluck(:id)

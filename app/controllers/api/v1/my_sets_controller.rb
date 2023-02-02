@@ -1,7 +1,5 @@
 class Api::V1::MySetsController < ApplicationController
-  protect_from_forgery
 
-  before_action :authenticate_api_v1_user!
   before_action ->{
     set_my_set
     data_owner(@my_set)
@@ -57,6 +55,6 @@ class Api::V1::MySetsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def my_set_params
-      params.require(:my_set).permit(:name)
+      params.fetch(:my_set, {}).permit(:name)
     end
 end

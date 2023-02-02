@@ -1,27 +1,25 @@
 class Api::V1::MealsController < ApplicationController
-  protect_from_forgery
 
-  before_action :authenticate_api_v1_user!
   before_action ->{
     set_meal
     data_owner(@meal)
-  }, only: %i[ show create destroy ]
+  }, only: %i[ show destroy ]
 
-  # GET /meals
-  # GET /meals.json
+  # GET /api/v1/meals
+  # GET /api/v1/meals.json
   def index
     @meals = current_api_v1_user.meals
     render json: { status: 'SUCCESS', message: 'Loaded the meal', data: @meals }
   end
 
-  # GET /meals/1
-  # GET /meals/1.json
+  # GET /api/v1/meals/1
+  # GET /api/v1/meals/1.json
   def show
     render json: { status: 'SUCCESS', message: 'Loaded the meal', data: @meal }
   end
 
-  # POST /meals
-  # POST /meals.json
+  # POST /api/v1/meals
+  # POST /api/v1/meals.json
   def create
     @meal = current_api_v1_user.meals.build(meal_params)
 
@@ -32,8 +30,8 @@ class Api::V1::MealsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /meals/1
-  # PATCH/PUT /meals/1.json
+  # PATCH/PUT /api/v1/meals/1
+  # PATCH/PUT /api/v1/meals/1.json
   # def update
   #   if @meal.update(meal_params)
   #     render :show, status: :ok, location: @meal
@@ -42,8 +40,8 @@ class Api::V1::MealsController < ApplicationController
   #   end
   # end
 
-  # DELETE /meals/1
-  # DELETE /meals/1.json
+  # DELETE /api/v1/meals/1
+  # DELETE /api/v1/meals/1.json
   def destroy
     @meal.destroy
     render json: { status: 'SUCCESS', message: 'Deleted the meal', data: @meal }
@@ -53,6 +51,6 @@ class Api::V1::MealsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def meal_params
-      params.require(:meal).permit(:user_id, :date, :timing, :comment)
+      params.fetch(:meal, {}).permit(:date, :timing, :comment)
     end
 end

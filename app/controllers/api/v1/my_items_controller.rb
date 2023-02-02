@@ -1,7 +1,5 @@
 class Api::V1::MyItemsController < ApplicationController
-  protect_from_forgery
 
-  before_action :authenticate_api_v1_user!
   before_action ->{
     set_my_item
     data_owner(@my_item)

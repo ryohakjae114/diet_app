@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_30_050331) do
+ActiveRecord::Schema.define(version: 2023_02_02_054330) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -75,11 +75,13 @@ ActiveRecord::Schema.define(version: 2023_01_30_050331) do
   end
 
   create_table "my_set_recipes", force: :cascade do |t|
-    t.bigint "recipe_id_id"
     t.integer "count"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["recipe_id_id"], name: "index_my_set_recipes_on_recipe_id_id"
+    t.bigint "recipe_id", null: false
+    t.bigint "my_set_id", null: false
+    t.index ["my_set_id"], name: "index_my_set_recipes_on_my_set_id"
+    t.index ["recipe_id"], name: "index_my_set_recipes_on_recipe_id"
   end
 
   create_table "my_sets", force: :cascade do |t|
@@ -161,7 +163,7 @@ ActiveRecord::Schema.define(version: 2023_01_30_050331) do
 
   create_table "weight_records", force: :cascade do |t|
     t.uuid "user_id"
-    t.decimal "weight"
+    t.decimal "weight", precision: 6, scale: 2, default: "0.0"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_weight_records_on_user_id"
@@ -172,6 +174,8 @@ ActiveRecord::Schema.define(version: 2023_01_30_050331) do
   add_foreign_key "meal_menus", "meals"
   add_foreign_key "meal_menus", "recipes"
   add_foreign_key "meals", "users"
+  add_foreign_key "my_set_recipes", "my_sets"
+  add_foreign_key "my_set_recipes", "recipes"
   add_foreign_key "my_sets", "users"
   add_foreign_key "post_comments", "posts"
   add_foreign_key "post_comments", "users"

@@ -1,6 +1,6 @@
 class MySet < ApplicationRecord
   belongs_to :user
-  has_many :posts
+  has_many   :my_set_recipes
 
-  validates :name,    presence: true, uniqueness: true
+  validates :name, presence: true, uniqueness: true, length: { maximum: 20 }
 end

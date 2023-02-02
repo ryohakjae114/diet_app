@@ -25,43 +25,44 @@ Rails.application.routes.draw do
                         registrations: "admins/auth/registrations"
   }
 
-
   #api
+  full_api = %i[ index create show update destroy ]
+
   namespace :api do
     namespace :v1 do
       
-      resources :meals, only: [:create, :show, :destroy], shallow: true do
+      resources :meals, only: [:index, :create, :show, :destroy], shallow: true do
         member do
-          resources :meal_menus, only: [:index, :create, :update, :show, :destroy]
+          resources :meal_menus, only: full_api
         end
       end
       
-      resources :weight_records,   only: [:create, :show, :destroy]
+      resources :weight_records,   only: [:index, :create, :show, :destroy]
 
-      resources :diaries, only: [:index, :create, :show, :update, :destroy]
-      resources :posts, only: [:index, :create, :show, :update, :destroy], shallow: true do
+      resources :diaries, only: full_api
+      resources :posts,   only: full_api, shallow: true do
         member do
-          resources :post_comments, only: [:index, :create, :show, :update, :destroy]
+          resources :post_comments, only: full_api
         end
       end
 
-      resources :my_items,   only: [:index, :create, :show, :update, :destroy]
-      resources :my_recipes, only: [:index, :create, :show, :update, :destroy], shallow: true do
+      resources :my_items,   only: full_api
+      resources :my_recipes, only: full_api, shallow: true do
         member do
           resources :my_recipe_items, only: [:index, :create, :show, :destroy]
         end
       end
 
-      resources :my_sets, shallow: true do
+      resources :my_sets, only: full_api, shallow: true do
         member do
-          resources :my_set_recipes
+          resources :my_set_recipes, only: full_api
         end
       end
       
       resources :items,   only: [:index, :show]
       resources :recipes, only: [:index, :show], shallow: true do
         member do
-          resources :recipe_items, only: [:index, :create, :show, :destroy]
+          resources :recipe_items, only: [:index, :show]
         end
       end
 

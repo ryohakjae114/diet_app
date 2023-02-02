@@ -1,7 +1,5 @@
 class Api::V1::ItemsController < ApplicationController
-  protect_from_forgery
-
-  before_action :authenticate_api_v1_user!
+  
   before_action ->{
     set_item
     share_data(@item)
@@ -25,10 +23,5 @@ class Api::V1::ItemsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_item
       @item = Item.find(params[:id])
-    end
-
-    # Only allow a list of trusted parameters through.
-    def item_params
-      params.fetch(:item, {})
     end
 end
