@@ -3,7 +3,7 @@ class Item < ApplicationRecord
   has_many :recipes, through: :recipe_items
   belongs_to :user, optional: true
 
-  validates :name,    presence: true, uniqueness: true
+  validates :name,    presence: true, uniqueness: { scope: :user }
   validates :kcal,    presence: true, numericality: true
   validates :protein, presence: true, numericality: true
   validates :fat,     presence: true, numericality: true

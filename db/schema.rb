@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_02_054330) do
+ActiveRecord::Schema.define(version: 2023_02_03_034053) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(version: 2023_02_02_054330) do
     t.string "unit"
     t.decimal "weight", precision: 8, scale: 3, default: "0.0"
     t.uuid "user_id"
-    t.index ["name"], name: "index_items_on_name", unique: true
+    t.index ["name", "user_id"], name: "index_items_on_name_and_user_id", unique: true
     t.index ["user_id"], name: "index_items_on_user_id"
   end
 
@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 2023_02_02_054330) do
     t.string "comment"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["date", "timing"], name: "index_meals_on_date_and_timing", unique: true
     t.index ["user_id"], name: "index_meals_on_user_id"
   end
 
@@ -89,6 +90,7 @@ ActiveRecord::Schema.define(version: 2023_02_02_054330) do
     t.string "name"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["name", "user_id"], name: "index_my_sets_on_name_and_user_id", unique: true
     t.index ["user_id"], name: "index_my_sets_on_user_id"
   end
 
@@ -107,6 +109,8 @@ ActiveRecord::Schema.define(version: 2023_02_02_054330) do
     t.text "text"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.date "date"
+    t.index ["user_id", "date"], name: "index_posts_on_user_id_and_date", unique: true
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
@@ -134,6 +138,7 @@ ActiveRecord::Schema.define(version: 2023_02_02_054330) do
     t.datetime "updated_at", precision: 6, null: false
     t.decimal "kcal", precision: 8, scale: 3, default: "0.0"
     t.uuid "user_id"
+    t.index ["name", "user_id"], name: "index_recipes_on_name_and_user_id", unique: true
     t.index ["user_id"], name: "index_recipes_on_user_id"
   end
 
