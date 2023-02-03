@@ -1,14 +1,24 @@
 class Api::V1::ItemsController < ApplicationController
+
+  before_action ->{
+    set_items
+  }, only: %i[search index]
   
   before_action ->{
     set_item
     share_data(@item)
   }, only: :show
 
+  # GET /api/v1/items/search/a
+  # GET /api/v1/items/search/a.json
+  def search
+    @hit_items = @items.where("name LIKE ? ", '%'+params[:keyword]+'%')
+    render json: { status: 'SUCCESS', message: 'Loaded items', data: @hit_items }
+  end
+
   # GET /api/v1/items
   # GET /api/v1/items.json
   def index
-    @items = Item.where(user_id: nil)
     render json: { status: 'SUCCESS', message: 'Loaded items', data: @items }
   end
 
@@ -20,6 +30,11 @@ class Api::V1::ItemsController < ApplicationController
 
 
   private
+
+    def set_items
+      @items = Item.where(user_id: nil)
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_item
       @item = Item.find(params[:id])

@@ -1,14 +1,24 @@
 class Api::V1::MySetsController < ApplicationController
 
   before_action ->{
+    set_my_sets
+  }, only: %i[search index]
+
+  before_action ->{
     set_my_set
     data_owner(@my_set)
   }, only: %i[ show update destroy ]
 
+  # GET /api/v1/my_recipes/search/a
+  # GET /api/v1/my_recipes/search/a.json
+  def search
+    @hit_sets = @my_sets.where("name LIKE ? ", '%'+params[:keyword]+'%')
+    render json: { status: 'SUCCESS', message: 'Loaded sets', data: @hit_sets }
+  end
+
   # GET /api/v1/my_sets
   # GET /api/v1/my_sets.json
   def index
-    @my_sets = current_api_v1_user.my_sets
     render json: { status: 'SUCCESS', message: 'Loaded recipes', data: @my_sets }
   end
 
@@ -48,6 +58,11 @@ class Api::V1::MySetsController < ApplicationController
   end
 
   private
+
+    def set_my_sets
+      @my_sets = current_api_v1_user.my_sets
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_my_set
       @my_set = MySet.find(params[:id])

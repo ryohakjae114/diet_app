@@ -60,11 +60,18 @@ Rails.application.routes.draw do
       end
       
       resources :items,   only: [:index, :show]
+
       resources :recipes, only: [:index, :show], shallow: true do
         member do
           resources :recipe_items, only: [:index, :show]
         end
       end
+
+      get '/items/search/:keyword',      to: 'items#search'
+      get '/recipes/search/:keyword',    to: 'recipes#search'
+      get '/my_items/search/:keyword',   to: 'my_items#search'
+      get '/my_recipes/search/:keyword', to: 'my_recipes#search'
+      get '/my_sets/search/:keyword',    to: 'my_sets#search'
 
       mount_devise_token_auth_for "User", at: "auth", controllers: {
                                             sessions:      "api/v1/auth/sessions",

@@ -1,13 +1,23 @@
 class Api::V1::MyItemsController < ApplicationController
 
   before_action ->{
+    set_my_items
+  }, only: %i[search index]
+
+  before_action ->{
     set_my_item
     data_owner(@my_item)
   }, only: %i[ show update destroy ]
 
+  # GET /api/v1/my_items/search/a
+  # GET /api/v1/my_items/search/a.json
+  def search
+    @hit_items = @my_items.where("name LIKE ? ", '%'+params[:keyword]+'%')
+    render json: { status: 'SUCCESS', message: 'Loaded my_items', data: @hit_items }
+  end
+
   # GET /api/v1/my_items.json
   def index
-    @my_items = current_api_v1_user.items
     render json: { status: 'SUCCESS', message: 'Loaded my_items', data: @my_items }
   end
 
@@ -43,6 +53,11 @@ class Api::V1::MyItemsController < ApplicationController
   end
 
   private
+
+    def set_my_items
+      @my_items = current_api_v1_user.items
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_my_item
       @my_item = Item.find(params[:id])
