@@ -36,6 +36,8 @@ Rails.application.routes.draw do
           resources :meal_menus, only: full_api
         end
       end
+
+      resources :exercise_records, only: [:index, :create, :show, :destroy]
       
       resources :weight_records,   only: [:index, :create, :show, :destroy]
 
@@ -78,6 +80,8 @@ Rails.application.routes.draw do
                                             registrations: "api/v1/auth/registrations",
                                             passwords:     "api/v1/auth/passwords"
       }
+
+      resources :relationships, only: [:create, :destroy]
 
     end
   end

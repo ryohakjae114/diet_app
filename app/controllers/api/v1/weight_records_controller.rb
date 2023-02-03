@@ -6,21 +6,21 @@ class Api::V1::WeightRecordsController < ApplicationController
     data_owner(@weight_record)
   }, only: %i[ show destroy ]
 
-  # GET /weight_records
-  # GET /weight_records.json
+  # GET /api/v1/weight_records
+  # GET /api/v1/weight_records.json
   def index
     @weight_records = current_api_v1_user.weight_records
     render json: { status: 'SUCCESS', message: 'Loaded weight_records', data: @weight_records }
   end
 
-  # GET /weight_records/1
-  # GET /weight_records/1.json
+  # GET /api/v1/weight_records/1
+  # GET /api/v1/weight_records/1.json
   def show
     render json: { status: 'SUCCESS', message: 'Loaded the weight_record', data: @weight_record }
   end
 
-  # POST /weight_records
-  # POST /weight_records.json
+  # POST /api/v1/weight_records
+  # POST /api/v1/weight_records.json
   def create
     @weight_record = current_api_v1_user.weight_records.build(weight_record_params)
 
@@ -31,8 +31,8 @@ class Api::V1::WeightRecordsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /weight_records/1
-  # PATCH/PUT /weight_records/1.json
+  # PATCH/PUT /api/v1/weight_records/1
+  # PATCH/PUT /api/v1/weight_records/1.json
   # def update
   #   if @weight_record.update(weight_record_params)
   #     render :show, status: :ok, location: @weight_record
@@ -41,8 +41,8 @@ class Api::V1::WeightRecordsController < ApplicationController
   #   end
   # end
 
-  # DELETE /weight_records/1
-  # DELETE /weight_records/1.json
+  # DELETE /api/v1/weight_records/1
+  # DELETE /api/v1/weight_records/1.json
   def destroy
     @weight_record.destroy
     render json: { status: 'SUCCESS', message: 'Deleted the weight_record', data: @weight_record }
@@ -56,6 +56,6 @@ class Api::V1::WeightRecordsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def weight_record_params
-      params.require(:weight_record).permit(:weight)
+      params.fetch(:weight_record, {}).permit(:weight)
     end
 end
