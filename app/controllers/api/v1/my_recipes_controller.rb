@@ -1,13 +1,23 @@
 class Api::V1::MyRecipesController < ApplicationController
 
   before_action ->{
+    set_my_recipes
+  }, only: %i[search index]
+
+  before_action ->{
     set_my_recipe
     data_owner(@my_recipe)
   }, only: %i[ show update destroy ]
 
+  # GET /api/v1/my_recipes/search/a
+  # GET /api/v1/my_recipes/search/a.json
+  def search
+    @hit_recipes = @my_recipes.where("name LIKE ? ", '%'+params[:keyword]+'%')
+    render json: { status: 'SUCCESS', message: 'Loaded recipes', data: @hit_recipes }
+  end
+
   # GET /api/v1/my_recipes.json
   def index
-    @my_recipes = current_api_v1_user.recipes
     render json: { status: 'SUCCESS', message: 'Loaded recipes', data: @my_recipes }
   end
 
@@ -43,6 +53,11 @@ class Api::V1::MyRecipesController < ApplicationController
   end
 
   private
+
+    def set_my_recipes
+      @my_recipes = current_api_v1_user.recipes
+    end
+    
     # Use callbacks to share common setup or constraints between actions.
     def set_my_recipe
       @my_recipe = Recipe.find(params[:id])
