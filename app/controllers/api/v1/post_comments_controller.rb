@@ -1,4 +1,5 @@
 class Api::V1::PostCommentsController < ApplicationController
+  before_action :authenticate_api_v1_user!
   
   before_action :can_use_diary
   before_action :have_own_diary,   only: %i[ create update destroy]

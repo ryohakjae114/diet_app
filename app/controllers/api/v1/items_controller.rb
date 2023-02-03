@@ -1,5 +1,6 @@
 class Api::V1::ItemsController < ApplicationController
-
+  before_action :authenticate_api_v1_user!
+  
   before_action ->{
     set_items
   }, only: %i[search index]

@@ -1,4 +1,5 @@
 class Api::V1::MyItemsController < ApplicationController
+  before_action :authenticate_api_v1_user!
 
   before_action ->{
     set_my_items

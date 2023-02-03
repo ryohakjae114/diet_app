@@ -1,4 +1,5 @@
 class Api::V1::DiariesController < ApplicationController
+  before_action :authenticate_api_v1_user!
   
   before_action :can_use_diary
   before_action :set_diary, only: %i[ show update destroy ]

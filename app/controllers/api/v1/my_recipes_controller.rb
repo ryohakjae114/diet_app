@@ -1,4 +1,5 @@
 class Api::V1::MyRecipesController < ApplicationController
+  before_action :authenticate_api_v1_user!
 
   before_action ->{
     set_my_recipes
