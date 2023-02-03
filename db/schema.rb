@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_03_034053) do
+ActiveRecord::Schema.define(version: 2023_02_03_072518) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -35,6 +35,15 @@ ActiveRecord::Schema.define(version: 2023_02_03_034053) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_diaries_on_user_id"
+  end
+
+  create_table "exercise_records", force: :cascade do |t|
+    t.string "name"
+    t.decimal "kcal", precision: 7, scale: 3
+    t.uuid "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_exercise_records_on_user_id"
   end
 
   create_table "items", force: :cascade do |t|
@@ -142,6 +151,16 @@ ActiveRecord::Schema.define(version: 2023_02_03_034053) do
     t.index ["user_id"], name: "index_recipes_on_user_id"
   end
 
+  create_table "relationships", force: :cascade do |t|
+    t.uuid "follower_id"
+    t.uuid "followed_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["followed_id"], name: "index_relationships_on_followed_id"
+    t.index ["follower_id", "followed_id"], name: "index_relationships_on_follower_id_and_followed_id", unique: true
+    t.index ["follower_id"], name: "index_relationships_on_follower_id"
+  end
+
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "provider", default: "email", null: false
     t.string "uid", default: "", null: false
@@ -175,6 +194,7 @@ ActiveRecord::Schema.define(version: 2023_02_03_034053) do
   end
 
   add_foreign_key "diaries", "users"
+  add_foreign_key "exercise_records", "users"
   add_foreign_key "items", "users"
   add_foreign_key "meal_menus", "meals"
   add_foreign_key "meal_menus", "recipes"

@@ -4,6 +4,8 @@
     "carb",
     "omniauthable",
     "timeoutable",
+    "unfollow",
+    "Unfollowed",
     "validatable"
   ]
 }
