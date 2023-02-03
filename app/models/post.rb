@@ -2,6 +2,7 @@ class Post < ApplicationRecord
   belongs_to :user
   has_many :post_comments
 
+  validates :date, presence: true, uniqueness: { scope: :user }
   validates :text, presence: true, length: { maximum: 500 }
 
   def self.all_public_posts
