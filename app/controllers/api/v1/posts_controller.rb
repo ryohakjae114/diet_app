@@ -3,10 +3,16 @@ class Api::V1::PostsController < ApplicationController
   
   before_action :can_use_diary
   before_action :have_own_diary, only: %i[ create update destroy ]
-  before_action :set_post, only: %i[ show update destroy ]
+  before_action :set_post, only: %i[current_user_favorite? show update destroy ]
   before_action ->{
     data_owner(@post)
   }, only: %i[ update destroy ]
+
+  def current_user_favorite?
+    favorite = @post.favorites
+    @boolean = favorite.exists?(user: current_api_v1_user)
+    render json: { status: 'SUCCESS', message: 'Loaded the boolean', data: @boolean }
+  end
 
   # GET /api/v1/posts
   # GET /api/v1/posts.json

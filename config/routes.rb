@@ -44,9 +44,13 @@ Rails.application.routes.draw do
       resources :diaries, only: full_api
       resources :posts,   only: full_api, shallow: true do
         member do
+          resources :favorites, only: [ :index, :create, :show, :destroy]
+        end
+        member do
           resources :post_comments, only: full_api
         end
       end
+      get '/posts/:id/current_user_favorite', to: 'posts#current_user_favorite?'
 
       resources :my_items,   only: full_api
       resources :my_recipes, only: full_api, shallow: true do
