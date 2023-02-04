@@ -24,6 +24,7 @@ class User < ActiveRecord::Base
   has_many :weight_records,   dependent: :destroy
   has_one  :diary,            dependent: :destroy
   has_many :posts,            dependent: :destroy
+  has_many :favorites,        dependent: :destroy
   has_many :post_comments,    dependent: :destroy
   has_many :items,            dependent: :destroy
   has_many :recipes,          dependent: :destroy

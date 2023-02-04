@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_03_091139) do
+ActiveRecord::Schema.define(version: 2023_02_04_073413) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -44,6 +44,15 @@ ActiveRecord::Schema.define(version: 2023_02_03_091139) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_exercise_records_on_user_id"
+  end
+
+  create_table "favorites", force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.bigint "post_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["post_id"], name: "index_favorites_on_post_id"
+    t.index ["user_id", "post_id"], name: "index_favorites_on_user_id_and_post_id", unique: true
   end
 
   create_table "items", force: :cascade do |t|
@@ -195,6 +204,7 @@ ActiveRecord::Schema.define(version: 2023_02_03_091139) do
 
   add_foreign_key "diaries", "users"
   add_foreign_key "exercise_records", "users"
+  add_foreign_key "favorites", "posts"
   add_foreign_key "items", "users"
   add_foreign_key "meal_menus", "meals"
   add_foreign_key "meal_menus", "recipes"
