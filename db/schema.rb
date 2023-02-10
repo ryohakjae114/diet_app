@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_04_073413) do
+ActiveRecord::Schema.define(version: 2023_02_06_004444) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -110,6 +110,21 @@ ActiveRecord::Schema.define(version: 2023_02_04_073413) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["name", "user_id"], name: "index_my_sets_on_name_and_user_id", unique: true
     t.index ["user_id"], name: "index_my_sets_on_user_id"
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.uuid "visitor_id", null: false
+    t.uuid "visited_id", null: false
+    t.integer "favorite_id"
+    t.integer "post_comment_id"
+    t.string "action", default: "", null: false
+    t.boolean "checked", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["favorite_id"], name: "index_notifications_on_favorite_id"
+    t.index ["post_comment_id"], name: "index_notifications_on_post_comment_id"
+    t.index ["visited_id"], name: "index_notifications_on_visited_id"
+    t.index ["visitor_id"], name: "index_notifications_on_visitor_id"
   end
 
   create_table "post_comments", force: :cascade do |t|
