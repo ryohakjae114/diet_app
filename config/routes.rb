@@ -84,6 +84,7 @@ Rails.application.routes.draw do
                                             registrations: "api/v1/auth/registrations",
                                             passwords:     "api/v1/auth/passwords"
       }
+      get '/users/show_me',    to: 'users#show_me'
 
       resources :relationships, only: [:create, :destroy]
 
