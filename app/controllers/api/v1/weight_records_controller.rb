@@ -22,9 +22,11 @@ class Api::V1::WeightRecordsController < ApplicationController
   # POST /api/v1/weight_records
   # POST /api/v1/weight_records.json
   def create
-    @weight_record = current_api_v1_user.weight_records.build(weight_record_params)
+    user = current_api_v1_user
+    @weight_record = user.weight_records.build(weight_record_params)
 
     if @weight_record.save
+      user.update_column(:weight, @weight_record.weight)
       render json: { status: 'SUCCESS', data: @weight_record }
     else
       render json: { status: 'ERROR', data: @weight_record.errors }

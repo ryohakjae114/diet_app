@@ -28,6 +28,7 @@ class User < ActiveRecord::Base
 
   has_many :meals,            dependent: :destroy
   has_many :exercise_records, dependent: :destroy
+  has_one  :diet_goal,       dependent: :destroy
   has_many :weight_records,   dependent: :destroy
   has_one  :diary,            dependent: :destroy
   has_many :posts,            dependent: :destroy
@@ -58,5 +59,27 @@ class User < ActiveRecord::Base
   # 現在のユーザーがフォローしてたらtrueを返す
   def following?(other_user)
     following.include?(other_user)
+  end
+
+  def daily_nutrients(date)
+    daily_nutrients = { kcal: 0.0, protein: 0.0, carb: 0.0, fat: 0.0, df: 0.0 }
+
+    meals = self.meals.where(date: date)
+
+    meals.each do |meal|
+      meal_nutrients = meal.total_nutrients
+
+      daily_nutrients[:kcal]    += meal_nutrients[:kcal]
+      daily_nutrients[:protein] += meal_nutrients[:protein]
+      daily_nutrients[:carb]    += meal_nutrients[:carb]
+      daily_nutrients[:fat]     += meal_nutrients[:fat]
+      daily_nutrients[:df]      += meal_nutrients[:df]
+    end
+
+    if meals.present?
+      return daily_nutrients
+    else
+      return false
+    end
   end
 end
