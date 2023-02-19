@@ -73,6 +73,9 @@ Rails.application.routes.draw do
         end
       end
 
+      resource :diet_goals,        only: [:create, :show, :destroy]
+      get '/diet_goals/advise/:date', to: 'diet_goals#advise'
+
       get '/items/search/:keyword',      to: 'items#search'
       get '/recipes/search/:keyword',    to: 'recipes#search'
       get '/my_items/search/:keyword',   to: 'my_items#search'

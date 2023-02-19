@@ -8,6 +8,6 @@ class Api::V1::Auth::RegistrationsController < DeviseTokenAuth::RegistrationsCon
     end
 
     def authenticated_params
-      [:nickname, :email, :gender, :height, :weight, :password, :password_confirmation]
+      [:nickname, :email, :gender, :age, :height, :weight, :password, :password_confirmation, :birthday, :daily_momentum]
     end
 end
