@@ -40,6 +40,18 @@ class User < ActiveRecord::Base
 
   validates :activated, inclusion: { in: [true, false] }
 
+  def age
+    today               = Date.today
+    this_years_birthday = Date.new(today.year, birthday.month, birthday.day)
+    age                 = today.year - birthday.year
+
+    if this_years_birthday > today
+      age -= 1
+    end
+
+    return age
+  end
+
   #diaryが存在し利用停止状態になっている場合trueを返す
   def is_suspended_diary?
     if self.diary.present?
