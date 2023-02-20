@@ -4,7 +4,7 @@ class Api::V1::DietGoalsController < ApplicationController
   before_action :set_diet_goal, only: %i[show advise destroy]
   before_action ->{
     data_owner(@diet_goal)
-  }, only: %i[show advise]
+  }, only: %i[show advise destroy]
   before_action :diet_not_finished, only: :advise
 
   def create
@@ -108,8 +108,8 @@ class Api::V1::DietGoalsController < ApplicationController
 
   def can_build_diet_goal
     @user = current_api_v1_user
-    if @user.gender.nil? || @user.age.nil? || @user.weight.nil? || @user.height.nil? || @user.daily_momentum.nil?
-      render json: { status: 'ERROR', message: "user must input gender,age,weight,height,daily_momentum" }
+    if @user.gender.nil? || @user.birthday.nil? || @user.weight.nil? || @user.height.nil? || @user.daily_momentum.nil?
+      render json: { status: 'ERROR', message: "user must input gender,birthday,weight,height,daily_momentum" }
     end
   end
 
