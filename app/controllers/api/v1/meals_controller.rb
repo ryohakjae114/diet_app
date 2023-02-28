@@ -35,7 +35,7 @@ class Api::V1::MealsController < ApplicationController
   # PATCH/PUT /api/v1/meals/1.json
   # def update
   #   if @meal.update(meal_params)
-  #     render :show, status: :ok, location: @meal
+  #     render :show, status: :ok
   #   else
   #     render json: @meal.errors, status: :unprocessable_entity
   #   end
