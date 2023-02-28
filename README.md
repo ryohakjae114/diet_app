@@ -45,7 +45,7 @@ docker compose build
 # 起動可能か確認。できたらCtrl+Cで終了。
 # tcp:// から始まるURLが表示されていれば起動できている。
 # 起動できてなければ何回か試してみる
-docker compose up # これで起動できたか確認。 tcp:// から始まるURLが表示されていれば起動できている。
+docker compose up # できたらCtrl+Cで終了
 
 docker compose run web bash # コンテナの中に入る
 
@@ -53,14 +53,23 @@ docker compose run web bash # コンテナの中に入る
 rake db:create
 rake db:migrate RAILS_ENV=development
 rake assets:precompile # 初回は時間かかる
+exit # コンテナから出る
 
-# コンテナから出る
-exit
 docker compose down
 
 # 本番起動
 docker compose up -d
 ```
+
+### IPアドレスでなくドメイン名でもアクセスできるようにする
+
+- [config/environments/development.rb](config/environments/development.rb#L63) を書き換えてホストを設定する。
+  - `docker compose restart` で反映。
+  - 本来は環境変数でやるべきなのだがまぁ・・・
+- Ubuntuの場合、 `apt install nginx` してから、 [dist/nginx.conf](dist/nginx.conf) を適当に弄って `/etc/nginx/sites-enabled/dietapp.conf` あたりに置く。
+  - `sudo nginx -t` で設定ミスをチェック。
+  - `sudo systemctl restart nginx` で反映。
+  - OSによってconfファイルの置き場所が変わるかも。インストールされた `/etc/nginx` の構造を見て適当に。
 
 ### アップデート
 
@@ -73,16 +82,16 @@ git pull origin main --ff-only
 
 # 以下初回起動と同じ
 docker compose build
-docker compose up
+docker compose down
+docker compose up # できたらCtrl+C
 docker compose run web bash
 
 # コンテナ内
 rake db:migrate RAILS_ENV=development
 rake assets:precompile
 exit # コンテナから出る
-docker compose down
 
-docker compose up -d
+docker compose restart
 ```
 
 ### データの削除
@@ -96,4 +105,14 @@ rm -rf tmp/cache tmp/sockets tmp/development_secret.txt tmp/restart.txt
 # データベースを削除 （超注意！）
 # 環境により sudo をつけないと実行できないことがある
 # rm -rf tmp/db
+```
+
+### データのバックアップ・復元
+
+```sh
+# カスタム形式(バイナリ)でバックアップ
+docker compose run -T db pg_dump -hdb -Uuser -Fc diet_app_development > pgdump.bin
+
+# カスタム形式(バイナリ)から上書き復元
+docker compose run -T db pg_restore -hdb -Uuser -ddiet_app_development -c < pgdump.bin
 ```

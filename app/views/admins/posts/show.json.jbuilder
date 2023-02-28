@@ -1,1 +1,1 @@
-json.partial! "posts/post", post: @post
+json.partial! "admins/posts/post", post: @post
