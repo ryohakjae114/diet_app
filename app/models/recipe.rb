@@ -4,7 +4,7 @@ class Recipe < ApplicationRecord
   belongs_to :user, optional: true
 
   enum cook_at: { 一般料理: 0, 外食・市販: 1 }
-  validates :name, presence: true, uniqueness: { scope: :user }, length: { maximum: 30 }
+  validates :name, presence: true, uniqueness: { scope: :user }, length: { maximum: 200 }
   # validates :protein, numericality: true
   # validates :carb,    numericality: true
   # validates :fat,     numericality: true
