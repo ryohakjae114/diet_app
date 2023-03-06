@@ -46,7 +46,7 @@ class Admins::ItemsController < ApplicationController
     respond_to do |format|
       if @item.update(item_params)
         format.html { redirect_to admins_item_url(@item), notice: "アイテムが更新されました" }
-        format.json { render :show, status: :ok, location: @item }
+        format.json { render :show, status: :ok, location: admins_item_url(@item) }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @item.errors, status: :unprocessable_entity }
@@ -65,6 +65,10 @@ class Admins::ItemsController < ApplicationController
   end
 
   private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_item
+      @item = Item.find(params[:id])
+    end
 
     # Only allow a list of trusted parameters through.
     def item_params

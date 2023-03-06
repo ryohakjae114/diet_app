@@ -37,7 +37,7 @@ class Api::V1::WeightRecordsController < ApplicationController
   # PATCH/PUT /api/v1/weight_records/1.json
   # def update
   #   if @weight_record.update(weight_record_params)
-  #     render :show, status: :ok, location: @weight_record
+  #     render :show, status: :ok
   #   else
   #     render json: @weight_record.errors, status: :unprocessable_entity
   #   end

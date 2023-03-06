@@ -47,7 +47,7 @@ class Api::V1::MyRecipeItemsController < ApplicationController
   # PATCH/PUT /my_recipe_items/1.json
   # def update
   #   if @my_recipe_item.update(my_recipe_item_params)
-  #     render :show, status: :ok, location: @my_recipe_item
+  #     render :show, status: :ok
   #   else
   #     render json: @my_recipe_item.errors, status: :unprocessable_entity
   #   end
